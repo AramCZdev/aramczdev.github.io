@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Noob</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4444ff;
+            --secondary: #222;
+            --accent: #44ffff;
+            --bg: #f5f5f5;
+            --text: #333;
+            --border: #ddd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            text-align: center;
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            border: 3px solid var(--primary);
+            box-shadow: 0 8px 30px rgba(255, 68, 68, 0.2);
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: bold;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .roast {
+            font-size: 20px;
+            color: var(--secondary);
+            margin: 30px 0;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .roast-items {
+            margin: 30px 0;
+            text-align: left;
+            background: #fff9f9;
+            padding: 20px;
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+        }
+
+        .roast-items li {
+            list-style: none;
+            margin: 12px 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .roast-items li:before {
+            content: "❌ ";
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .url-display {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s, transform 0.2s;
+            font-weight: bold;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .suggestions {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid var(--border);
+        }
+
+        .suggestions p {
+            color: #888;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .link-list a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .link-list a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px;
+            }
+
+            .error-code {
+                font-size: 80px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .roast {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-code">404</div>
+        <h1>NOOB</h1>
+        
+        <div class="roast">
+            <p>You typed it wrong, chief. Let me help you understand what just happened:</p>
+        </div>
+
+        <div class="url-display" id="urlDisplay"></div>
+
+        <div class="roast-items">
+            <li>That URL doesn't exist</li>
+            <li>Your typing game is weak</li>
+            <li>Did you copy-paste wrong too?</li>
+            <li>Maybe try the homepage instead?</li>
+            <li>This is awkward for both of us</li>
+        </div>
+
+        <button class="btn" onclick="goHome()">GO HOME AND LEARN TO TYPE</button>
+
+        <div class="suggestions">
+            <p>Here are some pages that <em>actually</em> exist:</p>
+            <div class="link-list">
+                <a href="/">← Homepage</a>
+                <a href="#projects">Projects</a>
+                <a href="#about">About</a>
+                <a href="https://aramczgames.github.io">AramCZGames (where the real stuff is)</a>
+                <a href="https://github.com/AramCZdev">GitHub</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('urlDisplay').textContent = window.location.href;
+
+        function goHome() {
+            window.location.href = '/';
+        }
+
+        // Easter egg: konami code reveals a secret message
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiIndex = 0;
+
+        document.addEventListener('keydown', (e) => {
+            konamiIndex = e.key === konamiCode[konamiIndex] ? konamiIndex + 1 : 0;
+            if (konamiIndex === konamiCode.length) {
+                document.body.style.filter = 'hue-rotate(180deg) saturate(2)';
+                setTimeout(() => alert('Wow, you know the Konami code. That\'s almost as impressive as getting the URL right.'), 100);
+                konamiIndex = 0;
+            }
+        });
+    </script>
+</body>
+</html>
