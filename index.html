@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AramCZ</title>
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
     <style>
         * {
             margin: 0;
@@ -13,12 +13,13 @@
         }
 
         :root {
-            --primary: #4444ff;
-            --secondary: #222;
-            --accent: #44ffff;
-            --bg: #f5f5f5;
-            --text: #333;
-            --border: #ddd;
+            --primary: #6b7eff;
+            --secondary: #d0d0d0;
+            --accent: #00d9ff;
+            --bg: #121212;
+            --text: #f5f5f5;
+            --border: #333333;
+            --card-bg: #1e1e1e;
         }
 
         body {
@@ -79,11 +80,11 @@
 
         .intro {
             padding: 30px;
-            background: white;
+            background: var(--card-bg);
             border-radius: 8px;
             border: 2px solid var(--border);
             margin-bottom: 40px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
         .intro p {
@@ -97,7 +98,7 @@
         }
 
         .project {
-            background: white;
+            background: var(--card-bg);
             border: 2px solid var(--border);
             border-radius: 8px;
             padding: 25px;
@@ -107,7 +108,7 @@
 
         .project:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(255, 68, 68, 0.15);
+            box-shadow: 0 8px 20px rgba(107, 126, 255, 0.2);
         }
 
         .project-header {
@@ -124,7 +125,7 @@
 
         .project-status {
             background: var(--primary);
-            color: white;
+            color: #121212;
             padding: 4px 12px;
             border-radius: 4px;
             font-size: 12px;
@@ -136,7 +137,7 @@
         }
 
         .project p {
-            color: #666;
+            color: #b0b0b0;
             margin-bottom: 12px;
         }
 
@@ -149,7 +150,7 @@
             display: inline-block;
             padding: 10px 20px;
             background: var(--primary);
-            color: white;
+            color: #ffffff;
             text-decoration: none;
             border-radius: 4px;
             transition: background 0.3s;
@@ -171,7 +172,7 @@
         footer {
             text-align: center;
             padding: 40px 20px;
-            color: #888;
+            color: #ffffff;
             border-top: 1px solid var(--border);
             margin-top: 60px;
         }
@@ -237,7 +238,7 @@
     <div class="container">
         <div class="intro">
             <h1>AramCZ</h1>
-            <p>Indie game developer from Czech Republic, maker of <em>Hell Jump</em> and occasional broken things.</p>
+            <p>Indie game developer from Czech Republic, developer of <em>Hell Jump</em> and occasional broken things.</p>
             <p>I build games in Godot, break code on Linux, and somehow keep my sanity through it all.</p>
         </div>
 
@@ -268,7 +269,11 @@
 
         <h2 id="about">About</h2>
         <div class="intro">
-            <p>Hello guys my name is Aram. I am a random guy from czech republic who is an IT nerd and likes to make games. So I decided to make my first game called: Hell Jump I am still learning something new but for the most part I know the essentials</p>
+            <p>Hey, I'm <strong>Aram</strong> — a self-taught developer and game developer from the Czech Republic. I spend most of my time making games in Godot, breaking things on Linux, and occasionally fixing them (success rate varies).</p>
+            <p>I'm deeply passionate about game development and programming. I'm still learning new things constantly, but I've picked up enough Godot, and system administration to know what I'm doing... most of the time. I believe in learning by doing, failing publicly, and shipping things that work.</p>
+            <p>Right now, I'm focused on getting <strong>Hell Jump</strong> to full release in May 2026 — a hellish platformer that's been my playground for learning Godot while pushing myself to ship a polished product. Beyond games, I enjoy building tools, exploring new tech, and contributing to projects that interest me.</p>
+            <p>If you're into indie games, Godot, Linux, or just want to chat about terrible life choices, <a href="#contact" style="color: var(--accent); text-decoration: none; font-weight: 500;">hit me up</a>.</p>
+            <p>Also when I am not programming I yell to my code at 3 AM. Just kidding lol</p>
         </div>
 
         <h2 id="contact">Contact & Links</h2>
