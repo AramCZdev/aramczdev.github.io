@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ubuntu Desktop</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/tabler-icons.min.css">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Ubuntu',sans-serif;
+  background:url('./images/wallpaper.jpg') center/cover no-repeat fixed;
+  overflow:hidden;
+  height:100vh;
+}
+
+.desktop{
+  width:100%;
+  height:100vh;
+  position:relative;
+}
+
+/* TOP BAR */
+
+.top-panel{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:40px;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(12px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  z-index:1000;
+}
+
+.panel-left{
+  width:150px;
+}
+
+.panel-center{
+  flex:1;
+  text-align:center;
+  color:white;
+  font-size:13px;
+}
+
+.panel-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:white;
+  font-size:13px;
+}
+
+.system-icons{
+  display:flex;
+  gap:8px;
+}
+
+/* DOCK */
+
+.dock{
+  position:fixed;
+  top:40px;
+  left:0;
+  bottom:0;
+  width:74px;
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(14px);
+  border-right:1px solid rgba(255,255,255,.08);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 0;
+  z-index:999;
+}
+
+.dock-apps{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.dock-icon,
+.ubuntu-logo{
+  width:50px;
+  height:50px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  color:white;
+  font-size:24px;
+  background:rgba(255,255,255,.10);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.18s;
+  position:relative;
+}
+
+.dock-icon:hover,
+.ubuntu-logo:hover{
+  transform:scale(1.12);
+  background:rgba(255,255,255,.18);
+}
+
+.dock-icon.active::before{
+  content:'';
+  position:absolute;
+  left:-8px;
+  width:4px;
+  height:24px;
+  background:#ff5f1f;
+  border-radius:10px;
+}
+
+.ubuntu-logo{
+  margin-bottom:10px;
+  font-size:26px;
+}
+
+/* WINDOWS */
+
+.window{
+  position:absolute;
+  background:#f6f5f4;
+  border-radius:14px;
+  box-shadow:0 18px 45px rgba(0,0,0,.45);
+  overflow:hidden;
+  display:none;
+  flex-direction:column;
+  resize:both;
+  min-width:350px;
+  min-height:250px;
+}
+
+.window.open{
+  display:flex;
+  animation:pop .16s ease;
+}
+
+@keyframes pop{
+  from{
+    opacity:0;
+    transform:scale(.94);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+.window-header{
+  height:46px;
+  background:#ededed;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 14px;
+  cursor:move;
+  user-select:none;
+}
+
+.window-header-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:14px;
+  font-weight:600;
+}
+
+.window-controls{
+  display:flex;
+  gap:8px;
+}
+
+.window-btn{
+  width:30px;
+  height:30px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  background:rgba(0,0,0,.08);
+  transition:.15s;
+}
+
+.window-btn:hover{
+  background:rgba(0,0,0,.14);
+}
+
+.window-content{
+  flex:1;
+  overflow:auto;
+  padding:16px;
+  background:#f6f5f4;
+}
+
+/* FILES */
+
+.files-box{
+  background:rgba(0,0,0,.05);
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:14px;
+}
+
+.file-item{
+  padding:8px;
+  border-radius:8px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.file-item:hover{
+  background:rgba(221,72,20,.12);
+}
+
+/* TERMINAL */
+
+.output{
+  background:#111;
+  color:#00ff66;
+  padding:12px;
+  border-radius:10px;
+  height:250px;
+  overflow:auto;
+  font-family:monospace;
+  white-space:pre-wrap;
+}
+
+.terminal-input{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.terminal-input input{
+  flex:1;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+.terminal-input button{
+  padding:10px 16px;
+  border:none;
+  border-radius:8px;
+  background:#dd4814;
+  color:white;
+  cursor:pointer;
+}
+
+/* APPS MENU */
+
+.all-apps-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(12px);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:5000;
+}
+
+.all-apps-modal.open{
+  display:flex;
+}
+
+.all-apps-grid{
+  width:900px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(100px,1fr));
+  gap:24px;
+}
+
+.all-apps-icon{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  color:white;
+  transition:.16s;
+}
+
+.all-apps-icon:hover{
+  transform:scale(1.08);
+}
+
+.all-apps-icon-box{
+  width:70px;
+  height:70px;
+  border-radius:18px;
+  background:rgba(255,255,255,.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
+}
+
+/* DARK MODE */
+
+body.dark-mode .window{
+  background:#232323;
+  color:white;
+}
+
+body.dark-mode .window-content{
+  background:#232323;
+  color:white;
+}
+
+body.dark-mode .window-header{
+  background:#1a1a1a;
+  color:white;
+}
+
+body.dark-mode .files-box{
+  background:rgba(255,255,255,.06);
+}
+</style>
+</head>
+
+<body>
+
+<div class="desktop">
+
+<div class="top-panel">
+  <div class="panel-left"></div>
+
+  <div class="panel-center">
+    Ubuntu Web
+  </div>
+
+  <div class="panel-right">
+    <div class="system-icons">
+      <i class="ti ti-wifi"></i>
+      <i class="ti ti-volume"></i>
+      <i class="ti ti-battery-3"></i>
+    </div>
+
+    <span id="clock">12:00</span>
+  </div>
+</div>
+
+<div class="dock">
+
+  <div class="dock-apps">
+
+<button class="dock-icon active" data-app="files">
+  <img src="./images/files.png" width="26" height="26">
+</button>
+
+<button class="dock-icon" data-app="terminal">
+  <img src="./images/terminal.png" width="26" height="26">
+</button>
+
+<button class="dock-icon" data-app="firefox">
+  <img src="./images/firefox.png" width="26" height="26">
+</button>
+
+<button class="dock-icon" data-app="settings">
+  <img src="./images/settings.png" width="26" height="26">
+</button>
+
+<button class="dock-icon" data-app="text">
+  <img src="./images/notes.png" width="26" height="26">
+</button>
+
+<button class="dock-icon" data-app="calc">
+  <img src="./images/calculator.png" width="26" height="26">
+</button>
+
+
+  </div>
+
+<button class="ubuntu-logo" onclick="toggleApps()">
+  <img src="./images/ubuntu.png" width="28" height="28">
+</button>
+
+</div>
+
+<div id="windows-container"></div>
+
+<!-- APPS MENU -->
+
+<div class="all-apps-modal" id="apps-modal">
+  <div class="all-apps-grid" id="apps-grid"></div>
+</div>
+
+</div>
+
+<script>
+
+/* FIREFOX HISTORY */
+
+let browserHistory = [];
+let historyIndex = -1;
+
+/* APPS */
+
+const apps = {
+
+files:{
+title:'Files',
+icon:'./images/files.png',
+width:620,
+height:420,
+content:`
+<h2 style="margin-bottom:16px;">Home</h2>
+
+<div class="files-box">
+  <h3>Documents</h3>
+
+  <div class="file-item">
+    <i class="ti ti-file-text"></i>
+    notes.txt
+  </div>
+
+  <div class="file-item">
+    <i class="ti ti-file"></i>
+    project.md
+  </div>
+</div>
+
+<div class="files-box">
+  <h3>Pictures</h3>
+
+  <div class="file-item">
+    <i class="ti ti-photo"></i>
+    wallpaper.jpg
+  </div>
+</div>
+`
+},
+
+terminal:{
+title:'Terminal',
+icon:'./images/terminal.png',
+width:700,
+height:450,
+content:`
+<div class="output" id="terminal-output">
+Ubuntu Web Terminal
+Type "help"
+</div>
+
+<div class="terminal-input">
+  <input id="terminal-cmd" placeholder="Enter command">
+  <button onclick="runCommand()">Run</button>
+</div>
+`
+},
+
+  firefox: {
+    title: 'Firefox',
+    icon: './images/firefox.png',
+    width: 1000,
+    height: 600,
+    content: `
+      <div style="display:flex;flex-direction:column;height:100%;gap:10px;">
+        <div style="display:flex;gap:8px;">
+          <button onclick="goBack()">⬅️</button>
+          <button onclick="goForward()">➡️</button>
+          <button onclick="reloadPage()">🔄</button>
+          <input id="address-bar" placeholder="Search or enter URL..." style="flex:1;padding:10px;border-radius:8px;border:1px solid #ccc;">
+          <button onclick="navigateWeb()" style="padding:10px 18px;border:none;border-radius:8px;background:#dd4814;color:white;cursor:pointer;">Go</button>
+        </div>
+        <iframe id="web-frame" style="flex:1;border:none;border-radius:10px;background:white;"></iframe>
+      </div>
+    `,
+    onOpen() {
+      const internetToggle = document.getElementById('internet-toggle');
+      if (internetToggle && !internetToggle.checked) {
+        return;
+      }
+      setTimeout(() => {
+        const iframe = document.getElementById('web-frame');
+        const bar = document.getElementById('address-bar');
+
+        iframe.src = 'https://aramczdev.github.io';
+        bar.value = 'aramczdev.github.io';
+
+        browserHistory = ['https://aramczdev.github.io'];
+        historyIndex = 0;
+      }, 100);
+    }
+  },
+
+settings:{
+title:'Settings',
+icon:'./images/settings.png',
+width:450,
+height:420,
+content:`
+<h2 style="margin-bottom:20px;">Settings</h2>
+
+<div class="files-box">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <span>Dark Mode</span>
+    <label class="switch">
+      <input type="checkbox" onchange="toggleDarkMode()" id="dark-mode-toggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <span>Internet</span>
+    <label class="switch">
+      <input type="checkbox" onchange="toggleInternet()" id="internet-toggle" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <span>Performance Mode</span>
+    <label class="switch">
+      <input type="checkbox" onchange="togglePerformance()" id="performance-toggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+</div>
+`
+},
+
+helljump: {
+title: 'Hell Jump (Beta)',
+icon: './images/HellJumpIcon.png',
+width: 1152,
+height: 658,
+content: `
+<iframe 
+src="./Hell Jump (Beta)/Hell Jump (Beta).html" 
+style="width:100%;height:100%;border:none;"
+></iframe>
+`
+},
+
+vms: {
+title: 'Ubuntu Virtual Machine',
+icon: './images/ubuntu.png',
+width: 1200,
+height: 800,
+content: `
+<iframe 
+src="https://aramczdev.github.io/tryubuntu/" 
+style="width:100%;height:100%;border:none;"
+></iframe>
+`
+},
+
+text:{
+title:'Text Editor',
+icon:'./images/notes.png',
+width:650,
+height:550,
+content:`<textarea class="window-textarea" style="width:100%;height:100%;border:none;outline:none;resize:none;background:transparent;font-family:monospace;font-size:14px;">
+# Welcome to Ubuntu
+# This is a text editor
+
+# Here's why Linux is great:
+"Linux Rocks! 🐧"
+
+# It's:
+- Open source
+- Secure
+- Free
+- Powerful
+- Community-driven
+- Highly customizable
+- Does not break after updates easily
+- Great for developers
+- Runs on everything from phones to supercomputers
+- Now for PC gaming too!
+- It's not just for IT nerds anymore
+- Why not give it a try? You might love it!
+
+# Ready to switch?
+</textarea>`
+},
+
+calc:{
+title:'Calculator',
+icon:'./images/calculator.png',
+width:320,
+height:450,
+content:`
+
+<input
+id="calc-display"
+readonly
+style="
+width:100%;
+padding:14px;
+font-size:26px;
+text-align:right;
+margin-bottom:12px;
+border-radius:10px;
+border:1px solid #ccc;
+"
+>
+
+<div style="
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+">
+
+${[
+'7','8','9','/',
+'4','5','6','*',
+'1','2','3','-',
+'0','.','C','+'
+].map(btn=>`
+<button
+onclick="
+${btn==='C'
+? 'calcClear()'
+: `calcInput('${btn}')`
+}
+"
+style="
+padding:18px;
+font-size:18px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+"
+>
+${btn}
+</button>
+`).join('')}
+
+<button
+onclick="calcEquals()"
+style="
+grid-column:1/-1;
+padding:16px;
+font-size:20px;
+background:#dd4814;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+"
+>
+=
+</button>
+
+</div>
+`
+}
+
+};
+
+/* CREATE WINDOWS */
+
+const windows={};
+
+Object.keys(apps).forEach(name=>{
+
+const app=apps[name];
+
+const win=document.createElement('div');
+
+win.className='window';
+
+win.id='win-'+name;
+
+win.style.width=app.width+'px';
+win.style.height=app.height+'px';
+win.style.left=(120+Math.random()*120)+'px';
+win.style.top=(70+Math.random()*90)+'px';
+
+win.innerHTML=`
+<div class="window-header">
+
+<div class="window-header-title">
+  <img src="${app.icon}" width="20" height="20">
+  ${app.title}
+</div>
+
+<div class="window-controls">
+
+<button
+class="window-btn"
+onclick="minimizeWindow('${name}')"
+>
+—
+</button>
+
+<button
+class="window-btn"
+onclick="closeWindow('${name}')"
+style="background:#e76f6f;"
+>
+✕
+</button>
+
+</div>
+
+</div>
+
+<div class="window-content">
+${app.content}
+</div>
+`;
+
+document
+.getElementById('windows-container')
+.appendChild(win);
+
+windows[name]={
+el:win,
+open:false
+};
+
+/* DRAGGING */
+
+const header=win.querySelector('.window-header');
+
+header.addEventListener('mousedown',e=>{
+
+focusWindow(win);
+
+const startX=e.clientX-win.offsetLeft;
+const startY=e.clientY-win.offsetTop;
+
+function move(ev){
+win.style.left=(ev.clientX-startX)+'px';
+win.style.top=(ev.clientY-startY)+'px';
+}
+
+function up(){
+document.removeEventListener('mousemove',move);
+document.removeEventListener('mouseup',up);
+}
+
+document.addEventListener('mousemove',move);
+document.addEventListener('mouseup',up);
+
+});
+
+});
+
+/* FOCUS */
+
+let topZ=100;
+
+function focusWindow(win){
+topZ++;
+win.style.zIndex=topZ;
+}
+
+/* OPEN */
+
+function openWindow(name){
+
+const w=windows[name];
+
+w.el.classList.add('open');
+
+w.open=true;
+
+focusWindow(w.el);
+
+document
+.querySelector(`.dock-icon[data-app="${name}"]`)
+.classList.add('active');
+
+if(apps[name].onOpen){
+apps[name].onOpen();
+}
+
+}
+
+/* CLOSE */
+
+function closeWindow(name){
+
+windows[name].el.classList.remove('open');
+
+windows[name].open=false;
+
+document
+.querySelector(`.dock-icon[data-app="${name}"]`)
+.classList.remove('active');
+
+}
+
+/* MINIMIZE */
+
+function minimizeWindow(name){
+closeWindow(name);
+}
+
+/* DOCK BUTTONS */
+
+document.querySelectorAll('.dock-icon')
+.forEach(btn=>{
+
+btn.addEventListener('click',()=>{
+
+const app=btn.dataset.app;
+
+if(windows[app].open){
+focusWindow(windows[app].el);
+}
+else{
+openWindow(app);
+}
+
+});
+
+});
+
+/* TERMINAL */
+
+function runCommand(){
+
+const input=document.getElementById('terminal-cmd');
+
+const output=document.getElementById('terminal-output');
+
+const cmd=input.value.trim();
+
+const commands={
+
+help:
+`help
+ls
+pwd
+whoami
+date
+neofetch`,
+
+ls:
+`Documents Downloads Pictures Music`,
+
+pwd:
+`/home/user`,
+
+whoami:
+`user`,
+
+date:
+new Date().toString(),
+
+neofetch:
+`
+Ubuntu Web
+Kernel: JavaScript
+Shell: Browser
+`
+};
+
+output.textContent+=
+`\n\n$ ${cmd}\n`+
+(commands[cmd]||'Command not found');
+
+input.value='';
+
+output.scrollTop=output.scrollHeight;
+
+}
+
+/* CALC */
+
+function calcInput(v){
+document.getElementById('calc-display').value+=v;
+}
+
+function calcClear(){
+document.getElementById('calc-display').value='';
+}
+
+function calcEquals(){
+
+const d=document.getElementById('calc-display');
+
+try{
+d.value=Function(
+'return '+d.value
+)();
+}
+catch{
+d.value='Error';
+}
+
+}
+
+/* DARK MODE */
+
+function toggleDarkMode(){
+document.body.classList.toggle('dark-mode');
+}
+
+/* CLOCK */
+
+function updateClock(){
+
+const now=new Date();
+
+document.getElementById('clock')
+.textContent=
+String(now.getHours()).padStart(2,'0')
++':'+
+String(now.getMinutes()).padStart(2,'0');
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+/* APPS MENU */
+
+function toggleApps(){
+document
+.getElementById('apps-modal')
+.classList.toggle('open');
+}
+
+const appsGrid=document.getElementById('apps-grid');
+
+Object.keys(apps).forEach(name=>{
+
+const app=apps[name];
+
+const el=document.createElement('div');
+
+el.className='all-apps-icon';
+
+el.innerHTML=`
+<div class="all-apps-icon-box">
+<img src="${app.icon}" width="40" height="40">
+</div>
+
+<div>
+${app.title}
+</div>
+`;
+
+el.onclick=()=>{
+openWindow(name);
+toggleApps();
+};
+
+appsGrid.appendChild(el);
+
+});
+
+/* CLOSE APPS MENU */
+
+document
+.getElementById('apps-modal')
+.addEventListener('click',e=>{
+
+if(e.target.id==='apps-modal'){
+toggleApps();
+}
+
+});
+
+/* FIREFOX FIXED */
+
+function navigateWeb(){
+
+const bar=document.getElementById('address-bar');
+
+const iframe=document.getElementById('web-frame');
+
+let url=bar.value.trim();
+
+if(
+!url.startsWith('http://')
+&&
+!url.startsWith('https://')
+){
+
+if(
+url.includes('.')
+){
+url='https://'+url;
+}
+else{
+url='https://duckduckgo.com/?q='+
+encodeURIComponent(url);
+}
+
+}
+
+iframe.src=url;
+
+browserHistory.push(url);
+
+historyIndex=
+browserHistory.length-1;
+
+}
+
+function goBack(){
+
+if(historyIndex>0){
+
+historyIndex--;
+
+document
+.getElementById('web-frame')
+.src=
+browserHistory[historyIndex];
+
+}
+
+}
+
+function goForward(){
+
+if(
+historyIndex<
+browserHistory.length-1
+){
+
+historyIndex++;
+
+document
+.getElementById('web-frame')
+.src=
+browserHistory[historyIndex];
+
+}
+
+}
+
+function reloadPage(){
+
+const frame=
+document.getElementById('web-frame');
+
+frame.src=frame.src;
+
+}
+
+/* ENTER SUPPORT */
+
+document.addEventListener('keydown',e=>{
+
+if(
+e.key==='Enter'
+&&
+document.activeElement.id==='address-bar'
+){
+navigateWeb();
+}
+
+if(
+e.key==='Enter'
+&&
+document.activeElement.id==='terminal-cmd'
+){
+runCommand();
+}
+
+});
+
+/* STARTUP */
+
+openWindow('files');
+
+</script>
+
+</body>
+</html>
