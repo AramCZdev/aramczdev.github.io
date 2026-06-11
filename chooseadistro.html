@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Distro Recommender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button.btn-back {
+            background-color: #6c757d;
+        }
+
+        button.btn-back:hover {
+            background-color: #5a6268;
+        }
+
+        .button-group {
+            margin-top: 20px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Linux Distro Recommender</h1>
+        <form id="questionForm" data-step="1">
+            <h2>What is your primary use case?</h2>
+            <label><input type="radio" name="useCase" value="generalUse"> General Use</label><br>
+            <label><input type="radio" name="useCase" value="gaming"> Gaming</label><br>
+            <label><input type="radio" name="useCase" value="server"> Server</label><br>
+
+            <button type="submit">Next</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const answers = {
+            useCase: null,
+            experience: null,
+            security: null
+        };
+
+        function getCheckedValue(name) {
+            const element = document.querySelector(`input[name="${name}"]:checked`);
+            return element ? element.value : null;
+        }
+
+        function showError(message) {
+            document.getElementById('result').innerText = message;
+        }
+
+        const form = document.getElementById('questionForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const step = parseInt(this.getAttribute('data-step'), 10);
+            if (step === 1) {
+                const useCase = getCheckedValue('useCase');
+                if (!useCase) {
+                    showError('Please choose a use case before continuing.');
+                    return;
+                }
+                answers.useCase = useCase;
+                showError('');
+                this.setAttribute('data-step', '2');
+                this.innerHTML = `
+                    <h2>What is your level of experience with Linux?</h2>
+                    <label><input type="radio" name="experience" value="beginner"> Beginner</label><br>
+                    <label><input type="radio" name="experience" value="intermediate"> Intermediate</label><br>
+                    <label><input type="radio" name="experience" value="advanced"> Advanced</label><br>
+
+                    <div class="button-group">
+                        <button class="btn-back" type="button">Back</button>
+                        <button type="submit">Next</button>
+                    </div>
+                `;
+            } else if (step === 2) {
+                const experience = getCheckedValue('experience');
+                if (!experience) {
+                    showError('Please choose your Linux experience before continuing.');
+                    return;
+                }
+                answers.experience = experience;
+                showError('');
+                this.setAttribute('data-step', '3');
+                this.innerHTML = `
+                    <h2>Do you want your distribution to be more secure but you will lose more convenience?</h2>
+                    <label><input type="radio" name="security" value="yes"> Yes</label><br>
+                    <label><input type="radio" name="security" value="no"> No</label><br>
+
+                    <div class="button-group">
+                        <button class="btn-back" type="button">Back</button>
+                        <button type="submit">Next</button>
+                    </div>
+                `;
+            } else if (step === 3) {
+                const security = getCheckedValue('security');
+                if (!security) {
+                    showError('Please choose a security preference before seeing your recommendation.');
+                    return;
+                }
+                answers.security = security;
+                showError('');
+
+let recommendations = [];
+switch (answers.useCase) {
+    case 'generalUse':
+        if (answers.experience === 'beginner') {
+            recommendations = answers.security === 'yes'
+                ? ["Fedora Silverblue", "openSUSE MicroOS"]
+                : ["Linux Mint", "Ubuntu", "Zorin OS"];
+        } else if (answers.experience === 'intermediate') {
+            recommendations = answers.security === 'yes'
+                ? ["Fedora Silverblue", "openSUSE MicroOS"]
+                : ["Ubuntu", "Linux Mint", "Manjaro"];
+        } else if (answers.experience === 'advanced') {
+            recommendations = answers.security === 'yes'
+                ? ["Fedora Silverblue", "openSUSE MicroOS"]
+                : ["Fedora", "Ubuntu", "EndeavourOS"];
+        }
+        break;
+
+    case 'gaming':
+        if (answers.experience === 'beginner') {
+            recommendations = answers.security === 'yes'
+                ? ["Bazzite"]
+                : ["Pop!_OS", "CachyOS", "Manjaro"];
+        } else if (answers.experience === 'intermediate') {
+            recommendations = answers.security === 'yes'
+                ? ["Bazzite"]
+                : ["Pop!_OS", "Manjaro", "Garuda Linux"];
+        } else if (answers.experience === 'advanced') {
+            recommendations = answers.security === 'yes'
+                ? ["Bazzite"]
+                : ["Arch Linux", "Manjaro", "Garuda Linux"];
+        }
+        break;
+
+    case 'server':
+        if (answers.experience === 'beginner') {
+            recommendations = answers.security === 'yes'
+                ? ["Ubuntu Core", "openSUSE MicroOS"]
+                : ["Ubuntu Server", "Debian", "CentOS Stream"];
+        } else if (answers.experience === 'intermediate') {
+            recommendations = answers.security === 'yes'
+                ? ["Ubuntu Core", "openSUSE MicroOS"]
+                : ["AlmaLinux", "Rocky Linux", "Ubuntu Server"];
+        } else if (answers.experience === 'advanced') {
+            recommendations = answers.security === 'yes'
+                ? ["Ubuntu Core", "openSUSE MicroOS"]
+                : ["Debian", "Rocky Linux", "AlmaLinux"];
+        }
+        break;
+}
+
+                const recommendationText = recommendations.length
+                    ? recommendations.join(', ')
+                    : 'No recommendation available.';
+                document.getElementById('result').innerText = `We recommend: ${recommendationText}`;
+            }
+        });
+
+        form.addEventListener('click', function(event) {
+            if (event.target.classList.contains('btn-back')) {
+                event.preventDefault();
+                const step = parseInt(this.getAttribute('data-step'), 10);
+                if (step === 2) {
+                    answers.experience = null;
+                    this.setAttribute('data-step', '1');
+                    this.innerHTML = `
+                        <h2>What is your primary use case?</h2>
+                        <label><input type="radio" name="useCase" value="generalUse" ${answers.useCase === 'generalUse' ? 'checked' : ''}> General Use</label><br>
+                        <label><input type="radio" name="useCase" value="gaming" ${answers.useCase === 'gaming' ? 'checked' : ''}> Gaming</label><br>
+                        <label><input type="radio" name="useCase" value="server" ${answers.useCase === 'server' ? 'checked' : ''}> Server</label><br>
+
+                        <button type="submit">Next</button>
+                    `;
+                    showError('');
+                } else if (step === 3) {
+                    answers.security = null;
+                    this.setAttribute('data-step', '2');
+                    this.innerHTML = `
+                        <h2>What is your level of experience with Linux?</h2>
+                        <label><input type="radio" name="experience" value="beginner" ${answers.experience === 'beginner' ? 'checked' : ''}> Beginner</label><br>
+                        <label><input type="radio" name="experience" value="intermediate" ${answers.experience === 'intermediate' ? 'checked' : ''}> Intermediate</label><br>
+                        <label><input type="radio" name="experience" value="advanced" ${answers.experience === 'advanced' ? 'checked' : ''}> Advanced</label><br>
+
+                        <div class="button-group">
+                            <button class="btn-back" type="button">Back</button>
+                            <button type="submit">Next</button>
+                        </div>
+                    `;
+                    showError('');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

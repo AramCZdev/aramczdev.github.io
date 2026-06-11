@@ -124,7 +124,25 @@
         }
 
         .project-status {
-            background: var(--primary);
+            background: #00ff00;
+            color: #121212;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .project-status-limbo {
+            background: #ffc400;
+            color: #121212;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .project-status-maintained {
+            background: rgb(153, 153, 153);
             color: #121212;
             padding: 4px 12px;
             border-radius: 4px;
@@ -155,6 +173,10 @@
             border-radius: 4px;
             transition: background 0.3s;
             font-weight: 500;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: inherit;
         }
 
         .btn:hover {
@@ -194,7 +216,35 @@
         .social a:hover {
             color: var(--accent);
         }
+        
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
 
+        .popup {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .popup h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .popup p {
+            margin-bottom: 20px;
+            color: #b0b0b0;
+        }
         @media (max-width: 600px) {
             header {
                 flex-direction: column;
@@ -222,6 +272,7 @@
                 margin-top: 10px;
             }
         }
+
     </style>
 </head>
 <body>
@@ -243,6 +294,30 @@
         </div>
 
         <h2 id="projects">Projects</h2>
+
+        <button class="btn" onclick="openStatusPopup()" style="margin-bottom: 20px;">
+            What do these statuses mean?
+        </button>
+
+        <div id="status-popup" class="popup-overlay">
+            <div class="popup">
+                <h3>Project Status Guide</h3>
+
+                <p><strong>🟢 Active</strong><br>
+                This project is currently being developed and may receive new features, updates, and improvements.</p>
+
+                <p><strong>🟡 Limbo</strong><br>
+                Development is currently paused or development slowed down. The project isn't cancelled and may return in the future.</p>
+
+                <p><strong>⚪ Maintained</strong><br>
+                The project is cancelled, but bug fixes and compatibility updates may still happen.</p>
+
+                <p><strong>🔴 Cancelled</strong><br>
+                The project is cancelled and will not be continued.</p>
+
+                <button class="btn" onclick="closeStatusPopup()">Close</button>
+            </div>
+        </div>
 
         <div class="project">
             <div class="project-header">
@@ -279,14 +354,39 @@
                     <h3>Try Ubuntu</h3>
                     <p>Try Ubuntu without installing it.</p>
                 </div>
-                <span class="project-status">Active</span>
+                <span class="project-status-limbo">Limbo</span>
             </div>
             <div class="project-links">
                 <a href="https://aramczdev.github.io/tryubuntu" class="btn">Try Ubuntu</a>
             </div>
         </div>
 
+        <div class="project">
+            <div class="project-header">
+                <div>
+                    <h3>Choose A Distro</h3>
+                    <p>Don't know which Linux distribution to choose? Find out which one is right for you.</p>
+                </div>
+                <span class="project-status-maintained">Maintained</span>
+            </div>
+            <div class="project-links">
+                <a href="https://aramczdev.github.io/chooseadistro" class="btn">Choose One!</a>
+            </div>
         </div>
+
+        <div class="project">
+            <div class="project-header">
+                <div>
+                    <h3>FreeFlix</h3>
+                    <p>Watch movies for free. Legally!</p>
+                </div>
+                <span class="project-status">Active</span>
+            </div>
+            <div class="project-links">
+                <a href="https://aramczdev.github.io/freeflix" class="btn">Watch Movies</a>
+            </div>
+        </div>
+
 
         <h2 id="tech">Tech Stack</h2>
         <div class="intro">
@@ -320,4 +420,21 @@
         <p>© 2026 AramCZ. Licensed under the GNU General Public License v3.0. Made with questionable life choices and VS Code.</p>
     </footer>
 </body>
+<script>
+    function openStatusPopup() {
+        document.getElementById("status-popup").style.display = "flex";
+    }
+
+    function closeStatusPopup() {
+        document.getElementById("status-popup").style.display = "none";
+    }
+
+    window.addEventListener("click", function(event) {
+        const popup = document.getElementById("status-popup");
+
+        if (event.target === popup) {
+            closeStatusPopup();
+        }
+    });
+</script>
 </html>

@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreeFlix — Free Legal Movies</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #141414;
+    color: #e5e5e5;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: linear-gradient(to bottom, #000 0%, transparent 100%);
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 18px 48px;
+    transition: background 0.3s;
+  }
+  nav.scrolled { background: #141414; }
+  .logo {
+    font-size: 28px;
+    font-weight: 800;
+    color: #e50914;
+    letter-spacing: -1px;
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 20px; }
+  .nav-links a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-right { margin-left: auto; display: flex; gap: 16px; align-items: center; }
+  .search-box {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid #888;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+    width: 200px;
+    transition: border-color 0.2s;
+  }
+  .search-box:focus { border-color: #fff; }
+  .search-box::placeholder { color: #888; }
+
+  /* HERO */
+  #hero {
+    height: 85vh;
+    min-height: 520px;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 48px 80px;
+    background: #000;
+    overflow: hidden;
+  }
+  #hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center top;
+    transition: opacity 0.6s;
+  }
+  #hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%
+    ),
+    linear-gradient(to top, rgba(20,20,20,0.95) 0%, transparent 40%);
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 520px; }
+  .hero-title {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+  }
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 14px;
+  }
+
+  .source-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  .source-badge .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #fff;
+  }
+  .source-badge.yt .dot { background: #ff0000; }
+  .source-badge.archive .dot { background: #5bcefa; }
+  .hero-desc {
+    font-size: 15px;
+    color: #ccc;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    max-width: 420px;
+  }
+  .hero-buttons { display: flex; gap: 12px; }
+  .btn-play {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+  }
+  .btn-play:hover { background: #ddd; }
+  .btn-info {
+    background: rgba(109,109,110,0.7);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+  }
+  .btn-info:hover { background: rgba(109,109,110,0.9); }
+
+  /* ROWS */
+  main { padding-bottom: 60px; }
+  .row { padding: 0 48px; margin-bottom: 40px; }
+  .row-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e5e5e5;
+    margin-bottom: 16px;
+    letter-spacing: 0.3px;
+  }
+  .cards {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-bottom: 8px;
+  }
+
+  .card {
+    flex: 1 1 200px;
+    min-width: 180px;
+    max-width: 200px;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.25s, z-index 0s;
+    background: #1f1f1f;
+  }
+  .card:hover {
+    transform: scale(1.09);
+    z-index: 10;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.8);
+  }
+  .card-thumb {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    display: block;
+    background: #2a2a2a;
+  }
+  .card-thumb-placeholder {
+    width: 100%;
+    aspect-ratio: 16/10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #666;
+    background: linear-gradient(135deg, #1a1a1a, #2e2e2e);
+  }
+  .card-info {
+    padding: 8px 10px;
+    background: #1f1f1f;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-year { font-size: 11px; color: #888; }
+  .card-source {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .src-yt { background: #ff0000; color: #fff; }
+  .src-archive { background: #1a3a5c; color: #5bcefa; border: 1px solid #5bcefa; }
+  .src-plex { background: #221f1f; color: #fcc403; border: 1px solid #fcc403; }
+
+  /* MODAL */
+  #modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,0.85);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  #modal.open { display: flex; }
+  .modal-box {
+    background: #181818;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.9);
+  }
+  .modal-close {
+    position: absolute;
+    top: 14px; right: 14px;
+    z-index: 10;
+    background: #181818;
+    border: none;
+    color: #fff;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .modal-close:hover { background: #333; }
+  .modal-video-wrapper {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .modal-video-wrapper iframe {
+    width: 100%; height: 100%;
+    border: none;
+    display: block;
+  }
+  .external-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background: #0a0a0a;
+    text-align: center;
+    padding: 40px;
+  }
+  .external-icon { font-size: 56px; }
+  .external-title { font-size: 22px; font-weight: 700; color: #fff; }
+  .external-note { font-size: 14px; color: #888; max-width: 360px; line-height: 1.6; }
+  .btn-external {
+    background: #e50914;
+    color: #fff;
+    border: none;
+    padding: 13px 32px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: background 0.2s;
+    margin-top: 8px;
+  }
+  .btn-external:hover { background: #b20710; }
+  .modal-body { padding: 24px 28px 32px; }
+  .modal-source-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .modal-source-banner.yt { background: #ff0000; color: #fff; }
+  .modal-source-banner.archive { background: #1a3a5c; color: #5bcefa; border: 1px solid #5bcefa; }
+  .modal-source-banner.plex { background: #221f1f; color: #fcc403; border: 1px solid #fcc403; }
+  .modal-source-banner.ext { background: #2a2a2a; color: #ccc; border: 1px solid #444; }
+  .modal-title { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+  .modal-meta { display: flex; gap: 14px; align-items: center; font-size: 13px; color: #aaa; margin-bottom: 16px; flex-wrap: wrap; }
+
+  .modal-desc { font-size: 14px; color: #ccc; line-height: 1.7; max-width: 600px; }
+  .modal-embed-note {
+    margin-top: 18px;
+    padding: 12px 16px;
+    background: #222;
+    border-left: 3px solid #555;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #999;
+  }
+
+  /* SEARCH */
+  #search-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: #141414;
+    padding: 100px 48px 48px;
+    overflow-y: auto;
+  }
+  #search-overlay.open { display: block; }
+  .search-results-title { font-size: 16px; color: #888; margin-bottom: 24px; }
+  .search-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  /* FILTER TAGS */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 0 48px;
+  }
+  .filter-tag {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    color: #ccc;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-tag:hover, .filter-tag.active { background: #fff; color: #000; border-color: #fff; }
+
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .hero-title { font-size: 32px; }
+    #hero { padding: 0 20px 60px; }
+    .row { padding: 0 20px; }
+    .filter-bar { padding: 0 20px; }
+    .card { flex: 0 0 150px; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a class="logo" href="#">FreeFlix</a>
+<div class="nav-links">
+    <a onclick="filterAll()">Home</a>
+    <a onclick="filterBySource('yt')">YouTube</a>
+    <a onclick="filterBySource('archive')">Archive.org</a>
+    <a onclick="filterBySource('plex')">Plex</a>
+    <a onclick="openContributeModal()">Add Movies</a>
+</div>
+  </div>
+  <div class="nav-right">
+    <input class="search-box" type="text" placeholder="&#128269; Search movies..." id="searchInput" oninput="handleSearch(this.value)" />
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div id="hero-bg"></div>
+  <div class="hero-content">
+    <span class="source-badge archive" id="hero-badge"><span class="dot"></span> Youtube</span>
+    <div class="hero-title" id="hero-title">The Oddsockeaters</div>
+    <div class="hero-meta">
+      <span>2016</span>
+      <span>1h 26m</span>
+    </div>
+    <p class="hero-desc" id="hero-desc">
+      Disclaimar: THIS MOVIE IS ONLY IN THE CZECH LANGUAGE, ENGLISH SUBTITLES AVAILABLE!
+The Oddsockeaters are small creatures that live among humans and secretly take one sock from every pair. The story follows HIHLÍK, a young Oddsockeater who, after losing his grandfather LAMOR, sets out to find his uncle PADR. Along the way, he learns about family, rules, and what it means to break them in search of something bigger.
+    </p>
+    <div class="hero-buttons">
+      <button class="btn-play" onclick="openMovie(movies[18])">▶ Play</button>
+    </div>
+  </div>
+</section>
+
+<!-- FILTERS -->
+<div class="filter-bar" id="filterBar">
+  <span class="filter-tag active" onclick="filterByGenre('all', this)">All</span>
+  <span class="filter-tag" onclick="filterByGenre('horror', this)">Horror</span>
+  <span class="filter-tag" onclick="filterByGenre('drama', this)">Drama</span>
+  <span class="filter-tag" onclick="filterByGenre('comedy', this)">Comedy</span>
+  <span class="filter-tag" onclick="filterByGenre('action', this)">Action</span>
+  <span class="filter-tag" onclick="filterByGenre('sci-fi', this)">Sci-Fi</span>
+  <span class="filter-tag" onclick="filterByGenre('documentary', this)">Documentary</span>
+</div>
+
+<main id="main-content"></main>
+
+<!-- MODAL -->
+<div id="modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-video-wrapper" id="modal-video"></div>
+    <div class="modal-body">
+      <span class="modal-source-banner" id="modal-src-badge"></span>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-meta" id="modal-meta"></div>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-embed-note" id="modal-embed-note"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH OVERLAY -->
+<div id="search-overlay">
+  <div class="search-results-title" id="search-label">Searching...</div>
+  <div class="search-grid" id="search-grid"></div>
+</div>
+
+<script>
+const movies = [
+  {
+    id: 1,
+    title: "Nosferatu",
+    year: 1922,
+    genre: ["horror"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 30m",
+    desc: "F.W. Murnau's legendary silent horror masterpiece.",
+    thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Wismar_Markt_Nosferatu_01_%28cropped%29.jpg/960px-Wismar_Markt_Nosferatu_01_%28cropped%29.jpg",
+    embedUrl: "https://www.youtube.com/embed/Ydxl9Gi2jIM",
+    embeddable: true,
+    watchUrl: null
+  },
+  {
+    id: 2,
+    title: "The General",
+    year: 1926,
+    genre: ["comedy", "action"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 18m",
+    desc: "Buster Keaton silent train comedy classic.",
+    thumb: "https://upload.wikimedia.org/wikipedia/commons/0/0c/The_General_%281926%29_-_Movie_Poster_2.png",
+    embedUrl: "https://www.youtube.com/embed/D_UdtS-8QS0",
+    embeddable: true,
+    watchUrl: null
+  },
+  {
+    id: 3,
+    title: "Metropolis",
+    year: 1927,
+    genre: ["sci-fi", "drama"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "2h 28m",
+    desc: "Fritz Lang sci-fi masterpiece.",
+    thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Greetings_from_Metropolis%2C_Illinois%2C_Fort_Massac_State_Park_-_Large_Letter_Postcard_%285885063171%29.jpg/960px-Greetings_from_Metropolis%2C_Illinois%2C_Fort_Massac_State_Park_-_Large_Letter_Postcard_%285885063171%29.jpg",
+    embedUrl: "https://www.youtube.com/embed/_q25QpZXfoU",
+    embeddable: true,
+    watchUrl: null
+  },
+  {
+    id: 4,
+    title: "Sherlock Jr.",
+    year: 1924,
+    genre: ["comedy"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "44m",
+    desc: "Buster Keaton dream-within-a-movie comedy.",
+    thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Sherlock_jr_poster.jpg/960px-Sherlock_jr_poster.jpg",
+    embedUrl: "https://www.youtube.com/embed/fZuqWxITq38",
+    embeddable: true,
+    watchUrl: null
+  },
+  {
+    id: 5,
+    title: "The Kid",
+    year: 1921,
+    genre: ["drama", "comedy"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "52m",
+    desc: "Charlie Chaplin and the Tramp raising a child.",
+    thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/CC_The_Kid_1921.jpg/960px-CC_The_Kid_1921.jpg",
+    embedUrl: "https://www.youtube.com/watch?v=yiE1mqq5bWk",
+    embeddable: false,
+    watchUrl: "https://www.youtube.com/watch?v=yiE1mqq5bWk"
+  },
+  {
+    id: 6,
+    title: "A Trip to the Moon",
+    year: 1902,
+    genre: ["sci-fi"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "12m",
+    desc: "Georges Méliès classic silent sci-fi film.",
+    thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Le_Voyage_dans_la_lune.jpg/960px-Le_Voyage_dans_la_lune.jpg",
+    embedUrl: "https://www.youtube.com/embed/qcyZ70tO9-Q",
+    embeddable: true,
+    watchUrl: null
+  },
+  {
+    id: 7,
+    title: "Safety Last!",
+    year: 1923,
+    genre: ["comedy"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 13m",
+    desc: "Harold Lloyd’s famous clock scene film.",
+    thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Safety_last_poster.jpg/960px-Safety_last_poster.jpg",
+    embedUrl: "https://www.youtube.com/embed/ZRzX4uxHU4k",
+    embeddable: true,
+    watchUrl: null
+  },
+  {
+    id: 8,
+    title: "Sunrise: A Song of Two Humans",
+    year: 1927,
+    genre: ["drama"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 34m",
+    desc: "Oscar-winning silent drama by F.W. Murnau.",
+    thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Sunrise_vintage.jpg/960px-Sunrise_vintage.jpg",
+    embedUrl: "https://www.youtube.com/embed/1CVLz1_MrCk",
+    embeddable: true,
+    watchUrl: null
+  },
+  {
+    id: 9,
+    title: "The Gold Rush",
+    year: 1925,
+    genre: ["comedy", "drama"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 35m",
+    desc: "Charlie Chaplin in the Klondike Gold Rush.",
+    thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Gold_rush_poster.jpg/960px-Gold_rush_poster.jpg",
+    embedUrl: "https://www.youtube.com/embed/a-nyVGSEjyU",
+    embeddable: true,
+    watchUrl: null
+  },
+  {
+    id: 10,
+    title: "M",
+    year: 1931,
+    genre: ["drama", "horror"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 42m",
+    desc: "Fritz Lang thriller about a hunted murderer.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/a/ab/M_poster.jpg",
+    embedUrl: "https://www.youtube.com/embed/HV2MwYplHxQ",
+    embeddable: true,
+    watchUrl: null
+  },
+  {
+    id: 11,
+    title: "Outsourced",
+    year: 2006,
+    genre: ["comedy"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "1h 42m",
+    desc: "A manager travels to India after his job is outsourced.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/5/55/OutsourcedPosterFinal.jpg",
+    embeddable: false,
+    watchUrl: "https://watch.plex.tv/movie/outsourced"
+  },
+  {
+    id: 12,
+    title: "Banking on Bitcoin",
+    year: 2016,
+    genre: ["documentary"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "1h 23m",
+    desc: "Documentary about Bitcoin’s rise.",
+    thumb: "https://m.media-amazon.com/images/M/MV5BMTg2ODI1OTI5N15BMl5BanBnXkFtZTgwMTM2NDc2MDI@._V1_QL75_UX84_.jpg",
+    embeddable: false,
+    watchUrl: "https://watch.plex.tv/movie/banking-on-bitcoin"
+  },
+  {
+    id: 13,
+    title: "Hot Dog Hands",
+    year: 2025,
+    genre: ["comedy"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "42m",
+    desc: "With the energy of an unhinged camp counselor, Sam Rager leans into grief, insecurities, and early aughts nostalgia. Genres",
+    thumb: "https://resizing.flixster.com/K_nA_BcjL8mcgTYHNtViLNIJ6Bg=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p31244055_v_v8_ac.jpg",
+    embeddable: false,
+    watchUrl: "https://watch.plex.tv/movie/hot-dog-hands-2025"
+  },
+  {
+    id: 14,
+    title: "Girl in the Refrigerator",
+    year: 2025,
+    genre: ["comedy"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "1h 33m",
+    desc: "Coleman Walinski's day off takes a bizarre twist after he accidentally kills his girlfriend and then attempts to dispose of her body. He spends the rest of his odd Saturday drinking with his best friend, Stosh, and hitting on Shaina, the girl next door. Cole and Shaina hit it off and things turn romantic, but how will she react when she finds out Cole has a girl in the refrigerator?",
+    thumb: "https://imgs.search.brave.com/nKHTvkJsflOr4TvF1ftfiHKG7i1YpfoFR8FnC_HtFR8/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9jYW52/YXMtbGIudHViaXR2/LmNvbS9vcHRzL2l1/clhwS1RsbDB0Ry13/PT0vOTExZTFiZjYt/NWI5NS00YmM0LTkz/NzAtNWE5OWUyNzlj/Y2I2L0NKZ0RFTWNF/T2dVeExqRXVPQT09",
+    embeddable: false,
+    watchUrl: "https://watch.plex.tv/movie/girl-in-the-refrigerator-2025"
+  },
+  {
+    id: 15,
+    title: "Strong",
+    year: 2022,
+    genre: ["action"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "22m",
+    desc: "With the help of her AI dog, a sixteen year-old girl must get her sick mother to another planet where a better life awaits.",
+    thumb: "https://m.media-amazon.com/images/M/MV5BNTg5ZGJlMzktMjNiNC00ODgzLTk0MTEtZTljYjZjMGNkMDZiXkEyXkFqcGc@._V1_.jpg",
+    embeddable: false,
+    watchUrl: "https://watch.plex.tv/movie/strong-2022"
+  },
+  {
+    id: 16,
+    title: "30 seconds in Hell",
+    year: 2021,
+    genre: ["drama"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "1h 37m",
+    desc: "On October 26, 1881 a gunfight broke out on Fremont Street in Tombstone, Arizona. Within 30 seconds, 31 rounds flew at close range between the Earp brothers, and the Clantons and McLaurys. Who was right? Who was wrong? Were there any heroes? Summoned from the grave by the mysterious Destiny and Ghost Rider, they'll answer for their sins, their lives, and their loves. And with the clock ticking down, no one will escape a return to the OK Corral, and their date with Destiny.",
+    thumb: "https://imgs.search.brave.com/xyipYSXjiM0WB0Lk7uNG2zJGrv7zS34HwfjYjYgHpS4/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9yZXNp/emluZy5mbGl4c3Rl/ci5jb20vLVhaQWZI/Wk0zOVV3YUdKSUZX/S0FFOGZTMGFrPS92/My90L2Fzc2V0cy9w/MjE0ODQ2MjBfcF92/MTNfYWEuanBn",
+    embeddable: false,
+    watchUrl: "https://watch.plex.tv/movie/30-seconds-in-hell"
+  },
+  {
+    id: 17,
+    title: "Shadow People",
+    year: 2011,
+    genre: ["sci-fi", "horror"],
+    source: "archive",
+    sourceName: "Internet Archive",
+    duration: "1h 50m",
+    desc: "A woman becomes haunted by mysterious nocturnal entities linked to sleep paralysis and government experiments.",
+    thumb: "https://imgs.search.brave.com/dhEhz2cGcfFKNFWRSw11TcJAMqqxIeQLUGbJYEl0O5U/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvZW4vdGh1bWIv/My8zNy9TaGFkb3df/UGVvcGxlX0RWRF9w/b3N0ZXIuanBnLzUx/MnB4LVNoYWRvd19Q/ZW9wbGVfRFZEX3Bv/c3Rlci5qcGc",
+    embedUrl: "https://archive.org/embed/grizzley-flats-aka-shadow-people-2012",
+    embeddable: true,
+    watchUrl: "https://archive.org/details/grizzley-flats-aka-shadow-people-2012"
+  },
+  {
+    id: 18,
+    title: "Night of the Living Dead",
+    year: 1968,
+    genre: ["horror"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 35m",
+    desc: "Classic zombie horror that defined the genre.",
+    thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Night_of_the_Living_Dead_%281968%29_Title_Screen.png/960px-Night_of_the_Living_Dead_%281968%29_Title_Screen.png",
+    embedUrl: "https://www.youtube.com/embed/H91BxkBXttE",
+    embeddable: true,
+    watchUrl: null
+  },
+  {
+    id: 19,
+    title: "The Oddsockeaters",
+    year: 2016,
+    genre: ["comedy"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 22m",
+    desc: "Disclaimar: THIS MOVIE IS ONLY IN THE CZECH LANGUAGE, ENGLISH SUBTITLES AVAILABLE! The Oddsockeaters are small creatures that live among humans and secretly take one sock from every pair. The story follows HIHLÍK, a young Oddsockeater who, after losing his grandfather LAMOR, sets out to find his uncle PADR. Along the way, he learns about family, rules, and what it means to break them in search of something bigger.",
+    thumb: "https://imgs.search.brave.com/zZ0Boe2z9bpp19RkD-HWNUEi28kB7e7v3rR8731I39c/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9yZXNp/emluZy5mbGl4c3Rl/ci5jb20veWx1WkF5/NUNzT0c5MnZSVEJh/dGZvOEVSRE9VPS9l/bXMuY0hKa0xXVnRj/eTFoYzNObGRITXZi/VzkyYVdWekx6SXlP/R1k1TldFeExUWTVN/bVl0TkROaE5DMWhZ/bUpsTFRabVpqbGpa/RFkxTWpnMFpTNTNa/V0p3",
+    embeddable: false,
+    watchUrl: "https://www.youtube.com/watch?v=pAN6VdN840o"
+  },
+  {
+    id: 20,
+    title: "Open Range",
+    year: 2003,
+    genre: ["western", "drama"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 51m",
+    desc: "Modern western with intense realism and great pacing.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/0/02/Open_range_poster.jpg/250px-Open_range_poster.jpg",
+    embedUrl: "https://www.youtube.com/embed/9gtkd1yGDqs",
+    embeddable: true,
+    watchUrl: null
+  },
+  {
+    id: 21,
+    title: "Primer",
+    year: 2004,
+    genre: ["sci-fi", "thriller"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 17m",
+    desc: "Ultra low-budget time travel movie that melts your brain.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/f/f7/Primer_%282004_film_poster%29.jpg",
+    embedUrl: "https://www.youtube.com/embed/JnT_xwCicM4",
+    embeddable: true,
+    watchUrl: null
+  },
+  {
+    id: 22,
+    title: "Coherence",
+    year: 2013,
+    genre: ["sci-fi", "thriller"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 29m",
+    desc: "Disclaimar: This movie is only available in Spanish, English subtitles available! A dinner party goes wrong during a cosmic anomaly.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9d/Coherence_2013_theatrical_poster.jpg/250px-Coherence_2013_theatrical_poster.jpg",
+    embedUrl: "https://www.youtube.com/embed/KVHDwLaVQF4",
+    embeddable: true
+  },
+  {
+    id: 23,
+    title: "The Dirties",
+    year: 2013,
+    genre: ["drama"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 23m",
+    desc: "Mockumentary about filmmaking and bullying.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/The_Dirties_poster.jpg/250px-The_Dirties_poster.jpg",
+    embedUrl: "https://www.youtube.com/embed/cUC3SBNkq-s",
+    embeddable: true,
+  }
+];
+
+
+function sourceClass(src) {
+  return { yt: 'src-yt', archive: 'src-archive', plex: 'src-plex' }[src] || 'src-archive';
+}
+function sourceLabel(src) {
+  return { yt: 'YouTube', archive: 'Archive.org', plex: 'Plex' }[src] || src;
+}
+
+function cardHTML(m) {
+  const srcCls = sourceClass(m.source);
+  const srcLbl = sourceLabel(m.source);
+  const thumb = m.thumb
+    ? `<img class="card-thumb" src="${m.thumb}" alt="${m.title}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+    : '';
+  const placeholder = `<div class="card-thumb-placeholder" style="${m.thumb ? 'display:none' : ''}">No Preview</div>`;
+  return `
+    <div class="card" onclick="openMovie(movies.find(x=>x.id===${m.id}))">
+      ${thumb}${placeholder}
+      <div class="card-info">
+        <div class="card-title">${m.title}</div>
+        <div class="card-meta">
+          <span class="card-year">${m.year}</span>
+          <span class="card-source ${srcCls}">${srcLbl}</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+let activeGenre = 'all';
+let activeSource = null;
+
+function renderRows(list) {
+  const main = document.getElementById('main-content');
+  if (!list.length) {
+    main.innerHTML = '<div style="padding:60px 48px;color:#666;font-size:18px;">No movies found for this filter.</div>';
+    return;
+  }
+  const bySource = {};
+  list.forEach(m => {
+    if (!bySource[m.source]) bySource[m.source] = [];
+    bySource[m.source].push(m);
+  });
+  let html = '';
+  const order = ['archive','yt','plex'];
+  const rowTitles = {
+    archive: '📼 Archive.org — Public Domain Films',
+    yt: '▶️ YouTube — Free to Watch',
+    plex: '▶️ Plex — Free Streaming'
+  };
+  order.forEach(src => {
+    if (!bySource[src]) return;
+    html += `<div class="row"><div class="row-title">${rowTitles[src] || src}</div><div class="cards">`;
+    bySource[src].forEach(m => { html += cardHTML(m); });
+    html += '</div></div>';
+  });
+  main.innerHTML = html;
+}
+
+function filterAll() {
+  activeGenre = 'all'; activeSource = null;
+  document.getElementById('search-overlay').classList.remove('open');
+  document.getElementById('searchInput').value = '';
+  document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+  document.querySelector('.filter-tag').classList.add('active');
+  renderRows(movies);
+}
+
+function filterByGenre(genre, el) {
+  activeGenre = genre; activeSource = null;
+  document.getElementById('search-overlay').classList.remove('open');
+  document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const list = genre === 'all' ? movies : movies.filter(m => m.genre.includes(genre));
+  renderRows(list);
+}
+
+function filterBySource(src) {
+  activeSource = src; activeGenre = 'all';
+  document.getElementById('search-overlay').classList.remove('open');
+  document.getElementById('searchInput').value = '';
+  renderRows(movies.filter(m => m.source === src));
+}
+
+function handleSearch(val) {
+  const overlay = document.getElementById('search-overlay');
+  const grid = document.getElementById('search-grid');
+  const label = document.getElementById('search-label');
+  if (!val.trim()) { overlay.classList.remove('open'); return; }
+  overlay.classList.add('open');
+  const q = val.toLowerCase();
+  const res = movies.filter(m =>
+    m.title.toLowerCase().includes(q) ||
+    m.genre.some(g => g.includes(q)) ||
+    m.sourceName.toLowerCase().includes(q)
+  );
+  label.textContent = res.length ? `${res.length} result${res.length>1?'s':''} for "${val}"` : `No results for "${val}"`;
+  grid.innerHTML = res.map(m => cardHTML(m)).join('');
+}
+
+function openMovie(m) {
+  if (!m) return;
+  const modal = document.getElementById('modal');
+  const video = document.getElementById('modal-video');
+  const srcBadge = document.getElementById('modal-src-badge');
+  const titleEl = document.getElementById('modal-title');
+  const metaEl = document.getElementById('modal-meta');
+  const descEl = document.getElementById('modal-desc');
+  const noteEl = document.getElementById('modal-embed-note');
+
+  titleEl.textContent = m.title;
+  descEl.textContent = m.desc;
+  metaEl.innerHTML = `<span>${m.year}</span><span>${m.duration}</span><span>${m.genre.join(', ')}</span>`;
+  srcBadge.textContent = '▶ Streaming on ' + m.sourceName;
+  srcBadge.className = 'modal-source-banner ' + (m.embeddable ? m.source : 'ext');
+
+  if (m.embeddable && m.embedUrl) {
+    video.innerHTML = `<iframe
+  src="${m.embedUrl}"
+  allow="autoplay; fullscreen; picture-in-picture"
+  allowfullscreen
+  loading="lazy"
+  referrerpolicy="no-referrer-when-downgrade"
+  style="border:0"
+  title="${m.title}">
+</iframe>`;
+    noteEl.innerHTML = `🔗 This video is embedded directly from <strong>${m.sourceName}</strong>. All rights belong to the original creators/publishers. Free and legal to watch.`;
+  } else {
+    video.innerHTML = `
+      <div class="external-placeholder">
+        <div class="external-icon">📺</div>
+        <div class="external-title">${m.title}</div>
+        <div class="external-note">This title is available on <strong>${m.sourceName}</strong>. Click below to watch it there — it's completely free and legal.</div>
+        <a class="btn-external" href="${m.watchUrl}" target="_blank" rel="noopener noreferrer">▶ Watch on ${m.sourceName} ↗</a>
+      </div>`;
+    noteEl.innerHTML = `🔗 <strong>${m.sourceName}</strong> does not allow direct embedding. Click "Watch on ${m.sourceName}" above to open it in a new tab — free & legal.`;
+  }
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modal-video').innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+function openContributeModal() {
+    const modal = document.getElementById('modal');
+    const video = document.getElementById('modal-video');
+    const srcBadge = document.getElementById('modal-src-badge');
+    const titleEl = document.getElementById('modal-title');
+    const metaEl = document.getElementById('modal-meta');
+    const descEl = document.getElementById('modal-desc');
+    const noteEl = document.getElementById('modal-embed-note');
+
+    video.innerHTML = `
+        <div class="external-placeholder">
+            <div class="external-icon">🍿</div>
+            <div class="external-title">Contribute to FreeFlix</div>
+            <div class="external-note">
+                Know a free and legal movie that should be on FreeFlix?
+                You can add it by creating a GitHub Pull Request.
+            </div>
+            <a class="btn-external"
+               href="https://github.com/AramCZdev/aramczdev.github.io/"
+               target="_blank"
+               rel="noopener noreferrer">
+               Open GitHub ↗
+            </a>
+        </div>`;
+
+descEl.innerHTML = `
+    <strong>Prerequisites:</strong><br><br>
+
+    • Git.<br>
+    • A GitHub account.<br>
+    • Basic familiarity with GitHub (forking repositories and opening Pull Requests). If you do not have that experience then <a href="https://www.youtube.com/watch?v=nCKdihvneS0">watch this video</a> <br>
+    • A free and legal movie source (YouTube, Archive.org, Plex, etc.).<br>
+    • A thumbnail image URL for the movie.<br>
+    • Optional: Visual Studio Code and Python 3 for local testing.<br><br>
+
+    <strong>How to contribute:</strong><br><br>
+
+    1. Fork the FreeFlix repository on GitHub.<br>
+    2. Open the HTML file containing the <code>movies</code> array.<br>
+    3. Copy an existing movie object and edit it with your movie's information.<br>
+    4. Test your changes locally.<br>
+    5. Commit your changes and open a Pull Request.<br><br>
+
+    <strong>Movie Object Structure:</strong><br><br>
+
+    <pre style="white-space: pre-wrap; background:#111; padding:12px; border-radius:6px; overflow:auto;">
+{
+  id: 22, // Unique identifier. Every movie must have its own ID.
+  title: "Movie name", // The title shown on FreeFlix.
+  year: 2013, // Release year.
+  genre: ["sci-fi", "thriller"], // One or more genres.
+  source: "yt", // Source identifier: yt, archive, or plex.
+  sourceName: "YouTube", // Human-readable source name.
+  duration: "1h 29m", // Runtime.
+  desc: "Movie description.", // Short summary.
+  thumb: "https://example.com/poster.jpg", // Thumbnail image URL.
+
+  // For embeddable movies:
+  embedUrl: "https://www.youtube.com/embed/VIDEO_ID or https://archive.org/embed/IDENTIFIER",
+  embeddable: true
+
+  // For non-embeddable movies use:
+  // watchUrl: "https://youtube.com/watch/VIDEO_ID or https://archive.org/details/IDENTIFIER or Plex URL",
+  // embeddable: false
+}
+    </pre>
+
+    <strong>Field explanations:</strong><br><br>
+
+    • <code>id</code> → Must be unique. Check existing movies before choosing one.<br>
+    • <code>title</code> → The movie's name.<br>
+    • <code>year</code> → Release year.<br>
+    • <code>genre</code> → Genres used by filters and search.<br>
+    • <code>source</code> → Internal identifier (<code>yt</code>, <code>archive</code>, or <code>plex</code>).<br>
+    • <code>sourceName</code> → Display name shown to users.<br>
+    • <code>duration</code> → Runtime shown on the movie page.<br>
+    • <code>desc</code> → Brief description of the movie.<br>
+    • <code>thumb</code> → Poster or thumbnail image URL. I recommend going on Wikimedia for images but it does not matter anyway.<br>
+    • <code>embedUrl</code> → Used when the movie can be embedded directly.<br>
+    • <code>watchUrl</code> → Used when users must be redirected externally.<br>
+    • <code>embeddable</code> → Set to <code>true</code> for embeds and <code>false</code> for external links.<br><br>
+
+    Pull Requests containing pirated content, broken links, duplicate movies, or invalid object structures may be rejected. Also put a disclaimer if a movie is not in English or has no subtitles. If your PR is rejected, don't be discouraged! Just ask for feedback and try again. Thanks for helping make FreeFlix better!
+`;
+
+    noteEl.innerHTML =
+        "🔗 All submissions are reviewed by AramCZ before being added to FreeFlix.";
+
+    modal.classList.add('open');
+    titleEl.textContent = "Contribute to FreeFlix";
+    metaEl.innerHTML = "";
+    srcBadge.textContent = "Contributing to open source ♥️";
+    srcBadge.className = "modal-source-banner ext";
+    document.body.style.overflow = 'hidden';
+}
+
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+renderRows(movies);
+</script>
+
+<footer style="padding: 24px 48px; color:#777; font-size:12px; text-align:center; border-top:1px solid #222;">
+  © 2026 AramCZ. Licensed under the GNU General Public License v3.0. Made with questionable life choices and VS Code. FreeFlix does not host any videos. All content is embedded from third-party platforms (YouTube, Plex etc.). Availability may change or be removed by the original uploaders.
+</footer>
+
+</body>
+</html>
