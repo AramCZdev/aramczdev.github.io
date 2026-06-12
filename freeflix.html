@@ -199,10 +199,9 @@
   }
   .card-thumb {
     width: 100%;
-    aspect-ratio: 16/10;
+    aspect-ratio: 2 / 3;
     object-fit: cover;
     display: block;
-    background: #2a2a2a;
   }
   .card-thumb-placeholder {
     width: 100%;
@@ -257,47 +256,59 @@
     padding: 24px;
   }
   #modal.open { display: flex; }
-  .modal-box {
-    background: #181818;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 900px;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.9);
-  }
+
+.modal-box {
+  background: #181818;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  width: min(900px, 95vw);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.modal-body {
+  background: #181818;
+  overflow-y: auto;
+  flex: 1;
+  padding: 24px 28px 32px;
+}
+
   .modal-close {
-    position: absolute;
-    top: 14px; right: 14px;
-    z-index: 10;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
     background: #181818;
-    border: none;
+    border: 1px solid #333;
     color: #fff;
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    font-size: 20px;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
   }
+
   .modal-close:hover { background: #333; }
+
   .modal-video-wrapper {
     width: 100%;
-    aspect-ratio: 16/9;
+    aspect-ratio: 16 / 9;
     background: #000;
-    border-radius: 10px 10px 0 0;
-    overflow: hidden;
     position: relative;
+    flex-shrink: 0;
   }
+
   .modal-video-wrapper iframe {
-    width: 100%; height: 100%;
-    border: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
     display: block;
   }
+
   .external-placeholder {
+    flex: 1;
     width: 100%;
     height: 100%;
     display: flex;
@@ -309,6 +320,7 @@
     text-align: center;
     padding: 40px;
   }
+
   .external-icon { font-size: 56px; }
   .external-title { font-size: 22px; font-weight: 700; color: #fff; }
   .external-note { font-size: 14px; color: #888; max-width: 360px; line-height: 1.6; }
@@ -399,12 +411,45 @@
   .filter-tag:hover, .filter-tag.active { background: #fff; color: #000; border-color: #fff; }
 
   @media (max-width: 768px) {
+    .modal-video-wrapper {
+      height: 38vh;
+    }
+
+    .external-placeholder {
+      padding: 20px;
+      gap: 14px;
+    }
+
+    .external-title {
+      font-size: 18px;
+    }
+
+    .external-icon {
+      font-size: 42px;
+    }
+  }
+
+  @media (max-width: 768px) {
     nav { padding: 14px 20px; }
     .hero-title { font-size: 32px; }
     #hero { padding: 0 20px 60px; }
     .row { padding: 0 20px; }
     .filter-bar { padding: 0 20px; }
     .card { flex: 0 0 150px; }
+  }
+
+  .modal-video-wrapper.contribute {
+    aspect-ratio: auto;
+    min-height: 420px;
+  }
+
+  .modal-video-wrapper.external {
+    aspect-ratio: auto;
+    min-height: 320px;
+  }
+
+  .modal-video-wrapper.embed {
+    aspect-ratio: 16 / 9;
   }
 </style>
 </head>
@@ -436,7 +481,7 @@
       <span>1h 26m</span>
     </div>
     <p class="hero-desc" id="hero-desc">
-      Disclaimar: THIS MOVIE IS ONLY IN THE CZECH LANGUAGE, ENGLISH SUBTITLES AVAILABLE!
+      Disclaimer: THIS MOVIE IS ONLY IN THE CZECH LANGUAGE, ENGLISH SUBTITLES AVAILABLE!
 The Oddsockeaters are small creatures that live among humans and secretly take one sock from every pair. The story follows HIHLÍK, a young Oddsockeater who, after losing his grandfather LAMOR, sets out to find his uncle PADR. Along the way, he learns about family, rules, and what it means to break them in search of something bigger.
     </p>
     <div class="hero-buttons">
@@ -735,7 +780,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "1h 22m",
-    desc: "Disclaimar: THIS MOVIE IS ONLY IN THE CZECH LANGUAGE, ENGLISH SUBTITLES AVAILABLE! The Oddsockeaters are small creatures that live among humans and secretly take one sock from every pair. The story follows HIHLÍK, a young Oddsockeater who, after losing his grandfather LAMOR, sets out to find his uncle PADR. Along the way, he learns about family, rules, and what it means to break them in search of something bigger.",
+    desc: "Disclaimer: THIS MOVIE IS ONLY IN THE CZECH LANGUAGE, ENGLISH SUBTITLES AVAILABLE! The Oddsockeaters are small creatures that live among humans and secretly take one sock from every pair. The story follows HIHLÍK, a young Oddsockeater who, after losing his grandfather LAMOR, sets out to find his uncle PADR. Along the way, he learns about family, rules, and what it means to break them in search of something bigger.",
     thumb: "https://imgs.search.brave.com/zZ0Boe2z9bpp19RkD-HWNUEi28kB7e7v3rR8731I39c/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9yZXNp/emluZy5mbGl4c3Rl/ci5jb20veWx1WkF5/NUNzT0c5MnZSVEJh/dGZvOEVSRE9VPS9l/bXMuY0hKa0xXVnRj/eTFoYzNObGRITXZi/VzkyYVdWekx6SXlP/R1k1TldFeExUWTVN/bVl0TkROaE5DMWhZ/bUpsTFRabVpqbGpa/RFkxTWpnMFpTNTNa/V0p3",
     embeddable: false,
     watchUrl: "https://www.youtube.com/watch?v=pAN6VdN840o"
@@ -776,7 +821,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "1h 29m",
-    desc: "Disclaimar: This movie is only available in Spanish, English subtitles available! A dinner party goes wrong during a cosmic anomaly.",
+    desc: "Disclaimer: This movie is only available in Spanish, English subtitles available! A dinner party goes wrong during a cosmic anomaly.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9d/Coherence_2013_theatrical_poster.jpg/250px-Coherence_2013_theatrical_poster.jpg",
     embedUrl: "https://www.youtube.com/embed/KVHDwLaVQF4",
     embeddable: true
@@ -793,7 +838,111 @@ const movies = [
     thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/The_Dirties_poster.jpg/250px-The_Dirties_poster.jpg",
     embedUrl: "https://www.youtube.com/embed/cUC3SBNkq-s",
     embeddable: true,
-  }
+  },
+  {
+    id: 24,
+    title: "Felix The Cat Movie",
+    year: 1988,
+    genre: ["comedy"],
+    source: "archive",
+    sourceName: "Archive.org",
+    duration: "1h 18m",
+    desc: "In another dimension, the villainous scientist Duke of Zill, with the help of his mechanical, geometric army, takes over the Land of Oriana, prompting Felix the Cat to save its princess and restore order once again.",
+    thumb: "https://imgs.search.brave.com/k_PL-OoOQn1JvgPXEkXOj4ERhPKkwos3WcAYAyVdnng/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvZW4vZS9lZi9G/ZWxpeF90aGVfY2F0/X3RoZV9tb3ZpZS5q/cGc",
+    embedUrl: "https://archive.org/embed/y-2-mate.is-felix-the-cat-the-movie-1988-x-bgwf-av-gqky-1080p-1640523499322",
+    embeddable: true,
+  },
+  {
+    id: 25,
+    title: "Happy High School",
+    year: 1986,
+    genre: ["comedy"],
+    source: "archive",
+    sourceName: "Archive.org",
+    duration: "1h 16m",
+    desc: "Disclaimer: THIS MOVIE IS ONLY IN THE SPANISH LANGUAGE, ENGLISH SUBTITLES AVAILABLE! In another dimension, the villainous scientist Duke of Zill, with the help of his mechanical, geometric army, takes over the Land of Oriana, prompting Felix the Cat to save its princess and restore order once again.",
+    thumb: "https://imgs.search.brave.com/MsL0Ti-EfxY55mKw7M9QUjyoMGB4sWL2I-hR3qCiZkc/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9waWNz/LmZpbG1hZmZpbml0/eS5jb20vbGFzX2Nv/bGVnaWFsYXNfYWth/X2xhc19jb2xlZ2lh/bGFzX3NlX2Rpdmll/cnRlbi02OTg2MTE2/MzQtbW1lZC5qcGc",
+    embedUrl: "https://archive.org/embed/happy-high-school-las-colegialas",
+    embeddable: true,
+  },
+  {
+    id: 26,
+    title: "Hey! Hey! USA",
+    year: 1938,
+    genre: ["comedy"],
+    source: "archive",
+    sourceName: "Archive.org",
+    duration: "1h 27m",
+    desc: "Will Hay plays Dr. Benjamin Twist, a man whose ambitions outstrip his abilities. Twist is a porter on an ocean liner bound for America who, through convoluted plot twists, finds himself masquerading as a professor. Teaming up with a gangster stowaway (Edgar Kennedy), Twist finds himself embroiled in a kidnap plot on the far side of the pond that is complicated by the fact that two sets of gangsters are attempting to get their hands on the ransom money.",
+    thumb: "https://imgs.search.brave.com/IuxVgBtuwhVbkcBDbAGi7w4GOhc7LXDGxYTLSmay7SU/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1Qk9Ua3paalE1/WlRVdFl6QmtaUzAw/WlRJM0xXRTBNak10/WlRrNFlXSmtabUU1/TW1FNFhrRXlYa0Zx/Y0djQC5fVjFfLmpw/Zw",
+    embedUrl: "https://archive.org/embed/HeyHeyUSA",
+    embeddable: true,
+  },
+  {
+    id: 27,
+    title: "Little Sister",
+    year: 2016,
+    genre: ["comedy", "drama"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "1h 31m",
+    desc: "Young nun Colleen is avoiding all contact from her family, returning to her childhood home in Asheville NC, she finds her old room exactly how she left it: painted black and covered in goth/metal posters.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/LittleSisterPoster.jpg/250px-LittleSisterPoster.jpg",
+    embeddable: false,
+    watchUrl: "https://watch.plex.tv/movie/little-sister-2016"
+  },
+  {
+    id: 28,
+    title: "The Wicker Man",
+    year: 1973,
+    genre: ["horror"],
+    source: "archive",
+    sourceName: "Archive.org",
+    duration: "1h 27m",
+    desc: "The Wicker Man is a 1973 British folk horror film directed by Robin Hardy and starring Edward Woodward, Britt Ekland, Diane Cilento, Ingrid Pitt and Christopher Lee. It follows Police Sergeant Neil Howie as he investigates the disappearance of a young girl named Rowan Morrison on the isolated Scottish island of Summerisle. As he delves deeper, he discovers that the islanders practice a form of Celtic paganism and that he himself is intended to be a human sacrifice to ensure a bountiful harvest.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/1/11/The_Wicker_Man_%281973_film%29_UK_poster.jpg/250px-The_Wicker_Man_%281973_film%29_UK_poster.jpg",
+    embedUrl: "https://archive.org/embed/the.-wicker.-man.-1973",
+    embeddable: true,
+  },
+  {
+    id: 29,
+    title: "House on Haunted Hill",
+    year: 1959,
+    genre: ["horror"],
+    source: "archive",
+    sourceName: "Archive.org",
+    duration: "1h 27m",
+    desc: "Frederick Loren has invited five strangers to a party of a lifetime. He is offering each of them $10,000 if they can stay the night in a house.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d1/The_House_On_Haunted_Hill.jpg/250px-The_House_On_Haunted_Hill.jpg",
+    embedUrl: "https://archive.org/embed/house_on_haunted_hill_ipod",
+    embeddable: true,
+  },
+  {
+    id: 30,
+    title: "Things to Come",
+    year: 1936,
+    genre: ["sci-fi"],
+    source: "archive",
+    sourceName: "Archive.org",
+    duration: "1h 37m",
+    desc: "Based on H.G. Wells' novel, this film explores the future of humanity through war, plague, and technological advancement.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Things-to-Come-UK-poster.jpg/250px-Things-to-Come-UK-poster.jpg",
+    embedUrl: "https://archive.org/embed/acfrma-Things_To_Come_1936_-_Public_Domain_Movies__Full",
+    embeddable: true,
+  },
+  {
+    id: 31,
+    title: "Utopia",
+    year: 1951,
+    genre: ["comedy", "sci-fi"],
+    source: "archive",
+    sourceName: "Archive.org",
+    duration: "2h 21m",
+    desc: "A satirical take on the future of society, technology, and human nature.",
+    thumb: "https://imgs.search.brave.com/agN8VTMeqTwE1KYrrLYbfG5N1spRZBxAG-usOtndrds/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9yZXNp/emluZy5mbGl4c3Rl/ci5jb20vLVhaQWZI/Wk0zOVV3YUdKSUZX/S0FFOGZTMGFrPS92/My90L2Fzc2V0cy9w/MjI1NF9wX3Y4X2Fh/LmpwZw",
+    embedUrl: "https://archive.org/embed/utopia",
+    embeddable: true,
+  },
 ];
 
 
@@ -841,9 +990,9 @@ function renderRows(list) {
   let html = '';
   const order = ['archive','yt','plex'];
   const rowTitles = {
-    archive: '📼 Archive.org — Public Domain Films',
-    yt: '▶️ YouTube — Free to Watch',
-    plex: '▶️ Plex — Free Streaming'
+    archive: 'Internet Archive',
+    yt: 'Youtube',
+    plex: 'Plex'
   };
   order.forEach(src => {
     if (!bySource[src]) return;
@@ -899,6 +1048,9 @@ function openMovie(m) {
   if (!m) return;
   const modal = document.getElementById('modal');
   const video = document.getElementById('modal-video');
+  video.className = "modal-video-wrapper";
+  video.classList.add(m.embeddable ? "embed" : "external");
+  video.classList.add("contribute");
   const srcBadge = document.getElementById('modal-src-badge');
   const titleEl = document.getElementById('modal-title');
   const metaEl = document.getElementById('modal-meta');
