@@ -430,12 +430,94 @@
   }
 
   @media (max-width: 768px) {
-    nav { padding: 14px 20px; }
-    .hero-title { font-size: 32px; }
-    #hero { padding: 0 20px 60px; }
-    .row { padding: 0 20px; }
-    .filter-bar { padding: 0 20px; }
-    .card { flex: 0 0 150px; }
+    nav {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      padding: 14px 16px;
+      background: #141414;
+    }
+
+    .logo {
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      padding: 6px 10px;
+      white-space: nowrap;
+    }
+
+    .nav-right {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    .search-box {
+      width: 100%;
+      font-size: 16px; /* Prevents iOS zoom */
+    }
+
+    #hero {
+      padding: 140px 20px 60px;
+    }
+
+    .hero-title {
+      font-size: 32px;
+    }
+
+    .row {
+      padding: 0 20px;
+    }
+
+    .filter-bar {
+      padding: 0 20px;
+    }
+
+    .card {
+      flex: 0 0 130px;
+      min-width: 130px;
+      max-width: 130px;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-height: 95vh;
+      border-radius: 0;
+    }
+
+    .modal-body {
+      padding: 18px;
+    }
+
+    .modal-title {
+      font-size: 24px;
+      padding-right: 40px;
+    }
+
+    .modal-meta {
+      font-size: 12px;
+    }
+
+    .external-placeholder {
+      min-height: 300px;
+      padding: 24px 18px;
+      justify-content: center;
+    }
+
+    .btn-external {
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+    }
   }
 
   .modal-video-wrapper.contribute {
@@ -942,6 +1024,84 @@ const movies = [
     thumb: "https://imgs.search.brave.com/agN8VTMeqTwE1KYrrLYbfG5N1spRZBxAG-usOtndrds/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9yZXNp/emluZy5mbGl4c3Rl/ci5jb20vLVhaQWZI/Wk0zOVV3YUdKSUZX/S0FFOGZTMGFrPS92/My90L2Fzc2V0cy9w/MjI1NF9wX3Y4X2Fh/LmpwZw",
     embedUrl: "https://archive.org/embed/utopia",
     embeddable: true,
+  },
+  {
+    id: 32,
+    title: "The Lucifer Complex",
+    year: 1978,
+    genre: ["sci-fi"],
+    source: "archive",
+    sourceName: "Archive.org",
+    duration: "2h 21m",
+    desc: "An intelligence agent discovers a Nazi plot to revive the Third Reich by using clones.",
+    thumb: "https://imgs.search.brave.com/ySmNu8G9q51wbaRt35cXLsORFjtrPiO6Vs4CCSC_ZM8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1Qk1EWXdZbVF6/WTJRdE9UTm1OeTAw/WVRNMUxXRmhOR010/WXpjM016WXdORGN3/WVdWbFhrRXlYa0Zx/Y0djQC5qcGc",
+    embedUrl: "https://archive.org/embed/LuciferComplex",
+    embeddable: true,
+  },
+  {
+    id: 33,
+    title: "Bad Taste",
+    year: 1987,
+    genre: ["comedy", "action"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "1h 27m",
+    desc: "Derek and his friends must investigate the missing people in a small village. Then they find out its human formed aliens that are really big headed monsters that used all the people in the small village into their snack burgers. Now, Derek must save the day and the world with his chainsaw before the meat eaters strikes the whole planet. Will Derek kill all the aliens?",
+    thumb: "https://imgs.search.brave.com/fJSvw_wJNWLk8BuhomKqHxSHYf9FtB6lG1ypbaiwpzY/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1Qll6Z3haRFJt/T0dFdFl6WTROUzAw/Tm1Wa0xUZ3laVGN0/WVdVd01USXdNRGhs/WldJMlhrRXlYa0Zx/Y0djQC5fVjFfLmpw/Zw",
+    embeddable: false,
+    watchUrl: "https://watch.plex.tv/movie/bad-taste"
+  },
+  {
+    id: 34,
+    title: "Man from Earth",
+    year: 2007,
+    genre: ["drama"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "1h 27m",
+    desc: "A departing professor gathers his closest colleagues for an intimate farewell, but the night takes an unexpected turn when he shares a stunning secret about his past. As the conversation unfolds, skepticism and curiosity collide, challenging everything they thought they knew about history, science, and belief.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/3/3b/The_Man_from_Earth.png",
+    embeddable: false,
+    watchUrl: "https://watch.plex.tv/movie/the-man-from-earth"
+  },
+  {
+    id: 35,
+    title: "Star Wreck: In the Pirkining",
+    year: 1978,
+    genre: ["sci-fi", "comedy"],
+    source: "archive",
+    sourceName: "Archive.org",
+    duration: "1h 43m",
+    desc: "The future looks bleak for Captain Pirk. Originally from the far future, he traveled back to save the world, but was shipwrecked on the 21st century. The world of the past is a dangerous place and he is finding it difficult to convince the ladies he is, in fact, an intergalactic space hero from the future. To make things right Pirk comes up with a questionable plan to save mankind's future...",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/8/8d/Starwreck6_dvdcover.jpg",
+    embedUrl: "https://archive.org/embed/StarWreckInThePirkining",
+    embeddable: true,
+  },
+  {
+    id: 36,
+    title: "Labyrinth",
+    year: 1986,
+    genre: ["drama"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "1h 41m",
+    desc: "Frustrated with babysitting on yet another weekend night, Sarah, a teenager with an active imagination, summons the Goblins to take her baby stepbrother away. When little Toby actually disappears, Sarah must follow him into a fantastical world to rescue him from the Goblin King. Guarding his castle is the labyrinth itself, a twisted maze of deception, populated with outrageous characters and unknown dangers.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Labyrinth_ver2.jpg/250px-Labyrinth_ver2.jpg",
+    embeddable: false,
+    watchUrl: "https://watch.plex.tv/movie/labyrinth-1986"
+  },
+  {
+    id: 37,
+    title: "World's Greatest Dad",
+    year: 2009,
+    genre: ["comedy","drama"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "1h m",
+    desc: "When his son's body is found in a humiliating accident, a lonely high school teacher inadvertently attracts an overwhelming amount of community and media attention after covering up the truth with a phony suicide note.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f7/Worldsgreatestdad.jpg/250px-Worldsgreatestdad.jpg",
+    embeddable: false,
+    watchUrl: "https://watch.plex.tv/movie/worlds-greatest-dad"
   },
 ];
 
