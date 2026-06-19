@@ -535,6 +535,29 @@
   .modal-video-wrapper.embed {
     aspect-ratio: 16 / 9;
   }
+
+.safe-btn {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: #ccc;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.safe-btn:hover {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+.safe-btn.off {
+  background: #e50914;
+  color: #fff;
+  border-color: #e50914;
+}
 </style>
 </head>
 <body>
@@ -547,6 +570,8 @@
     <a onclick="filterBySource('archive')">Archive.org</a>
     <a onclick="filterBySource('plex')">Plex</a>
     <a onclick="openContributeModal()">Add Movies</a>
+    <a onclick="openFAQModal()">FAQ</a>
+    <button id="safeToggle" class="safe-btn">Safe Mode: ON</button>
 </div>
   </div>
   <div class="nav-right">
@@ -564,9 +589,7 @@
       <span>2016</span>
       <span>1h 26m</span>
     </div>
-    <p class="hero-desc" id="hero-desc">
-      Disclaimer: THIS MOVIE IS ONLY IN THE CZECH LANGUAGE, ENGLISH SUBTITLES AVAILABLE!
-The Oddsockeaters are small creatures that live among humans and secretly take one sock from every pair. The story follows HIHLÍK, a young Oddsockeater who, after losing his grandfather LAMOR, sets out to find his uncle PADR. Along the way, he learns about family, rules, and what it means to break them in search of something bigger.
+    <p class="hero-desc" id="hero-desc">The Oddsockeaters are small creatures that live among humans and secretly take one sock from every pair. The story follows HIHLÍK, a young Oddsockeater who, after losing his grandfather LAMOR, sets out to find his uncle PADR. Along the way, he learns about family, rules, and what it means to break them in search of something bigger.
     </p>
     <div class="hero-buttons">
       <button class="btn-play" onclick="openMovie(movies[18])">▶ Play</button>
@@ -609,6 +632,9 @@ The Oddsockeaters are small creatures that live among humans and secretly take o
 </div>
 
 <script>
+
+let safeMode = true;
+
 const movies = [
   {
     id: 1,
@@ -618,6 +644,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "1h 30m",
+    language: "English",
     desc: "F.W. Murnau's legendary silent horror masterpiece.",
     thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Wismar_Markt_Nosferatu_01_%28cropped%29.jpg/960px-Wismar_Markt_Nosferatu_01_%28cropped%29.jpg",
     embedUrl: "https://www.youtube.com/embed/Ydxl9Gi2jIM",
@@ -631,6 +658,7 @@ const movies = [
     genre: ["comedy", "action"],
     source: "yt",
     sourceName: "YouTube",
+    language: "None (silent)",
     duration: "1h 18m",
     desc: "Buster Keaton silent train comedy classic.",
     thumb: "https://upload.wikimedia.org/wikipedia/commons/0/0c/The_General_%281926%29_-_Movie_Poster_2.png",
@@ -646,6 +674,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "2h 28m",
+    language: "None (silent)",
     desc: "Fritz Lang sci-fi masterpiece.",
     thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Greetings_from_Metropolis%2C_Illinois%2C_Fort_Massac_State_Park_-_Large_Letter_Postcard_%285885063171%29.jpg/960px-Greetings_from_Metropolis%2C_Illinois%2C_Fort_Massac_State_Park_-_Large_Letter_Postcard_%285885063171%29.jpg",
     embedUrl: "https://www.youtube.com/embed/_q25QpZXfoU",
@@ -660,6 +689,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "44m",
+    language: "None (silent)",
     desc: "Buster Keaton dream-within-a-movie comedy.",
     thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Sherlock_jr_poster.jpg/960px-Sherlock_jr_poster.jpg",
     embedUrl: "https://www.youtube.com/embed/fZuqWxITq38",
@@ -674,6 +704,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "52m",
+    language: "None (silent)",
     desc: "Charlie Chaplin and the Tramp raising a child.",
     thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/CC_The_Kid_1921.jpg/960px-CC_The_Kid_1921.jpg",
     embedUrl: "https://www.youtube.com/watch?v=yiE1mqq5bWk",
@@ -688,6 +719,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "12m",
+    language: "None (silent)",
     desc: "Georges Méliès classic silent sci-fi film.",
     thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Le_Voyage_dans_la_lune.jpg/960px-Le_Voyage_dans_la_lune.jpg",
     embedUrl: "https://www.youtube.com/embed/qcyZ70tO9-Q",
@@ -702,6 +734,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "1h 13m",
+    language: "None (silent)",
     desc: "Harold Lloyd’s famous clock scene film.",
     thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Safety_last_poster.jpg/960px-Safety_last_poster.jpg",
     embedUrl: "https://www.youtube.com/embed/ZRzX4uxHU4k",
@@ -716,6 +749,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "1h 34m",
+    language: "None (silent)",
     desc: "Oscar-winning silent drama by F.W. Murnau.",
     thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Sunrise_vintage.jpg/960px-Sunrise_vintage.jpg",
     embedUrl: "https://www.youtube.com/embed/1CVLz1_MrCk",
@@ -730,6 +764,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "1h 35m",
+    language: "None (silent)",
     desc: "Charlie Chaplin in the Klondike Gold Rush.",
     thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Gold_rush_poster.jpg/960px-Gold_rush_poster.jpg",
     embedUrl: "https://www.youtube.com/embed/a-nyVGSEjyU",
@@ -744,6 +779,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "1h 42m",
+    language: "German (with English subtitles)",
     desc: "Fritz Lang thriller about a hunted murderer.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/a/ab/M_poster.jpg",
     embedUrl: "https://www.youtube.com/embed/HV2MwYplHxQ",
@@ -758,6 +794,7 @@ const movies = [
     source: "plex",
     sourceName: "Plex",
     duration: "1h 42m",
+    language: "English",
     desc: "A manager travels to India after his job is outsourced.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/5/55/OutsourcedPosterFinal.jpg",
     embeddable: false,
@@ -770,6 +807,7 @@ const movies = [
     genre: ["documentary"],
     source: "plex",
     sourceName: "Plex",
+    language: "English",
     duration: "1h 23m",
     desc: "Documentary about Bitcoin’s rise.",
     thumb: "https://m.media-amazon.com/images/M/MV5BMTg2ODI1OTI5N15BMl5BanBnXkFtZTgwMTM2NDc2MDI@._V1_QL75_UX84_.jpg",
@@ -784,6 +822,7 @@ const movies = [
     source: "plex",
     sourceName: "Plex",
     duration: "42m",
+    language: "English",
     desc: "With the energy of an unhinged camp counselor, Sam Rager leans into grief, insecurities, and early aughts nostalgia. Genres",
     thumb: "https://resizing.flixster.com/K_nA_BcjL8mcgTYHNtViLNIJ6Bg=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p31244055_v_v8_ac.jpg",
     embeddable: false,
@@ -797,6 +836,7 @@ const movies = [
     source: "plex",
     sourceName: "Plex",
     duration: "1h 33m",
+    language: "English",
     desc: "Coleman Walinski's day off takes a bizarre twist after he accidentally kills his girlfriend and then attempts to dispose of her body. He spends the rest of his odd Saturday drinking with his best friend, Stosh, and hitting on Shaina, the girl next door. Cole and Shaina hit it off and things turn romantic, but how will she react when she finds out Cole has a girl in the refrigerator?",
     thumb: "https://imgs.search.brave.com/nKHTvkJsflOr4TvF1ftfiHKG7i1YpfoFR8FnC_HtFR8/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9jYW52/YXMtbGIudHViaXR2/LmNvbS9vcHRzL2l1/clhwS1RsbDB0Ry13/PT0vOTExZTFiZjYt/NWI5NS00YmM0LTkz/NzAtNWE5OWUyNzlj/Y2I2L0NKZ0RFTWNF/T2dVeExqRXVPQT09",
     embeddable: false,
@@ -810,6 +850,7 @@ const movies = [
     source: "plex",
     sourceName: "Plex",
     duration: "22m",
+    language: "English",
     desc: "With the help of her AI dog, a sixteen year-old girl must get her sick mother to another planet where a better life awaits.",
     thumb: "https://m.media-amazon.com/images/M/MV5BNTg5ZGJlMzktMjNiNC00ODgzLTk0MTEtZTljYjZjMGNkMDZiXkEyXkFqcGc@._V1_.jpg",
     embeddable: false,
@@ -823,6 +864,7 @@ const movies = [
     source: "plex",
     sourceName: "Plex",
     duration: "1h 37m",
+    language: "English",
     desc: "On October 26, 1881 a gunfight broke out on Fremont Street in Tombstone, Arizona. Within 30 seconds, 31 rounds flew at close range between the Earp brothers, and the Clantons and McLaurys. Who was right? Who was wrong? Were there any heroes? Summoned from the grave by the mysterious Destiny and Ghost Rider, they'll answer for their sins, their lives, and their loves. And with the clock ticking down, no one will escape a return to the OK Corral, and their date with Destiny.",
     thumb: "https://imgs.search.brave.com/xyipYSXjiM0WB0Lk7uNG2zJGrv7zS34HwfjYjYgHpS4/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9yZXNp/emluZy5mbGl4c3Rl/ci5jb20vLVhaQWZI/Wk0zOVV3YUdKSUZX/S0FFOGZTMGFrPS92/My90L2Fzc2V0cy9w/MjE0ODQ2MjBfcF92/MTNfYWEuanBn",
     embeddable: false,
@@ -836,6 +878,7 @@ const movies = [
     source: "archive",
     sourceName: "Internet Archive",
     duration: "1h 50m",
+    language: "English",
     desc: "A woman becomes haunted by mysterious nocturnal entities linked to sleep paralysis and government experiments.",
     thumb: "https://imgs.search.brave.com/dhEhz2cGcfFKNFWRSw11TcJAMqqxIeQLUGbJYEl0O5U/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvZW4vdGh1bWIv/My8zNy9TaGFkb3df/UGVvcGxlX0RWRF9w/b3N0ZXIuanBnLzUx/MnB4LVNoYWRvd19Q/ZW9wbGVfRFZEX3Bv/c3Rlci5qcGc",
     embedUrl: "https://archive.org/embed/grizzley-flats-aka-shadow-people-2012",
@@ -850,6 +893,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "1h 35m",
+    language: "English",
     desc: "Classic zombie horror that defined the genre.",
     thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Night_of_the_Living_Dead_%281968%29_Title_Screen.png/960px-Night_of_the_Living_Dead_%281968%29_Title_Screen.png",
     embedUrl: "https://www.youtube.com/embed/H91BxkBXttE",
@@ -864,24 +908,11 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "1h 22m",
-    desc: "Disclaimer: THIS MOVIE IS ONLY IN THE CZECH LANGUAGE, ENGLISH SUBTITLES AVAILABLE! The Oddsockeaters are small creatures that live among humans and secretly take one sock from every pair. The story follows HIHLÍK, a young Oddsockeater who, after losing his grandfather LAMOR, sets out to find his uncle PADR. Along the way, he learns about family, rules, and what it means to break them in search of something bigger.",
+    language: "Czech (English subtitles available)",
+    desc: "The Oddsockeaters are small creatures that live among humans and secretly take one sock from every pair. The story follows HIHLÍK, a young Oddsockeater who, after losing his grandfather LAMOR, sets out to find his uncle PADR. Along the way, he learns about family, rules, and what it means to break them in search of something bigger.",
     thumb: "https://imgs.search.brave.com/zZ0Boe2z9bpp19RkD-HWNUEi28kB7e7v3rR8731I39c/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9yZXNp/emluZy5mbGl4c3Rl/ci5jb20veWx1WkF5/NUNzT0c5MnZSVEJh/dGZvOEVSRE9VPS9l/bXMuY0hKa0xXVnRj/eTFoYzNObGRITXZi/VzkyYVdWekx6SXlP/R1k1TldFeExUWTVN/bVl0TkROaE5DMWhZ/bUpsTFRabVpqbGpa/RFkxTWpnMFpTNTNa/V0p3",
-    embeddable: false,
-    watchUrl: "https://www.youtube.com/watch?v=pAN6VdN840o"
-  },
-  {
-    id: 20,
-    title: "Open Range",
-    year: 2003,
-    genre: ["western", "drama"],
-    source: "yt",
-    sourceName: "YouTube",
-    duration: "1h 51m",
-    desc: "Modern western with intense realism and great pacing.",
-    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/0/02/Open_range_poster.jpg/250px-Open_range_poster.jpg",
-    embedUrl: "https://www.youtube.com/embed/9gtkd1yGDqs",
-    embeddable: true,
-    watchUrl: null
+    watchUrl: "https://www.youtube.com/watch?v=pAN6VdN840o",
+    embeddable: false
   },
   {
     id: 21,
@@ -891,6 +922,7 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "1h 17m",
+    language: "English",
     desc: "Ultra low-budget time travel movie that melts your brain.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/f/f7/Primer_%282004_film_poster%29.jpg",
     embedUrl: "https://www.youtube.com/embed/JnT_xwCicM4",
@@ -905,7 +937,8 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "1h 29m",
-    desc: "Disclaimer: This movie is only available in Spanish, English subtitles available! A dinner party goes wrong during a cosmic anomaly.",
+    language: "Spanish (English subtitles available)",
+    desc: "A dinner party goes wrong during a cosmic anomaly.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9d/Coherence_2013_theatrical_poster.jpg/250px-Coherence_2013_theatrical_poster.jpg",
     embedUrl: "https://www.youtube.com/embed/KVHDwLaVQF4",
     embeddable: true
@@ -918,7 +951,9 @@ const movies = [
     source: "yt",
     sourceName: "YouTube",
     duration: "1h 23m",
+    language: "English",
     desc: "Mockumentary about filmmaking and bullying.",
+    language: "English",
     thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/The_Dirties_poster.jpg/250px-The_Dirties_poster.jpg",
     embedUrl: "https://www.youtube.com/embed/cUC3SBNkq-s",
     embeddable: true,
@@ -929,8 +964,9 @@ const movies = [
     year: 1988,
     genre: ["comedy"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "1h 18m",
+    language: "English",
     desc: "In another dimension, the villainous scientist Duke of Zill, with the help of his mechanical, geometric army, takes over the Land of Oriana, prompting Felix the Cat to save its princess and restore order once again.",
     thumb: "https://imgs.search.brave.com/k_PL-OoOQn1JvgPXEkXOj4ERhPKkwos3WcAYAyVdnng/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvZW4vZS9lZi9G/ZWxpeF90aGVfY2F0/X3RoZV9tb3ZpZS5q/cGc",
     embedUrl: "https://archive.org/embed/y-2-mate.is-felix-the-cat-the-movie-1988-x-bgwf-av-gqky-1080p-1640523499322",
@@ -942,9 +978,10 @@ const movies = [
     year: 1986,
     genre: ["comedy"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "1h 16m",
-    desc: "Disclaimer: THIS MOVIE IS ONLY IN THE SPANISH LANGUAGE, ENGLISH SUBTITLES AVAILABLE! In another dimension, the villainous scientist Duke of Zill, with the help of his mechanical, geometric army, takes over the Land of Oriana, prompting Felix the Cat to save its princess and restore order once again.",
+    language: "Spanish (English subtitles available)",
+    desc: "In another dimension, the villainous scientist Duke of Zill, with the help of his mechanical, geometric army, takes over the Land of Oriana, prompting Felix the Cat to save its princess and restore order once again.",
     thumb: "https://imgs.search.brave.com/MsL0Ti-EfxY55mKw7M9QUjyoMGB4sWL2I-hR3qCiZkc/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9waWNz/LmZpbG1hZmZpbml0/eS5jb20vbGFzX2Nv/bGVnaWFsYXNfYWth/X2xhc19jb2xlZ2lh/bGFzX3NlX2Rpdmll/cnRlbi02OTg2MTE2/MzQtbW1lZC5qcGc",
     embedUrl: "https://archive.org/embed/happy-high-school-las-colegialas",
     embeddable: true,
@@ -955,8 +992,9 @@ const movies = [
     year: 1938,
     genre: ["comedy"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "1h 27m",
+    language: "English",
     desc: "Will Hay plays Dr. Benjamin Twist, a man whose ambitions outstrip his abilities. Twist is a porter on an ocean liner bound for America who, through convoluted plot twists, finds himself masquerading as a professor. Teaming up with a gangster stowaway (Edgar Kennedy), Twist finds himself embroiled in a kidnap plot on the far side of the pond that is complicated by the fact that two sets of gangsters are attempting to get their hands on the ransom money.",
     thumb: "https://imgs.search.brave.com/IuxVgBtuwhVbkcBDbAGi7w4GOhc7LXDGxYTLSmay7SU/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1Qk9Ua3paalE1/WlRVdFl6QmtaUzAw/WlRJM0xXRTBNak10/WlRrNFlXSmtabUU1/TW1FNFhrRXlYa0Zx/Y0djQC5fVjFfLmpw/Zw",
     embedUrl: "https://archive.org/embed/HeyHeyUSA",
@@ -970,6 +1008,7 @@ const movies = [
     source: "plex",
     sourceName: "Plex",
     duration: "1h 31m",
+    language: "English",
     desc: "Young nun Colleen is avoiding all contact from her family, returning to her childhood home in Asheville NC, she finds her old room exactly how she left it: painted black and covered in goth/metal posters.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/LittleSisterPoster.jpg/250px-LittleSisterPoster.jpg",
     embeddable: false,
@@ -981,8 +1020,9 @@ const movies = [
     year: 1973,
     genre: ["horror"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "1h 27m",
+    language: "English",
     desc: "The Wicker Man is a 1973 British folk horror film directed by Robin Hardy and starring Edward Woodward, Britt Ekland, Diane Cilento, Ingrid Pitt and Christopher Lee. It follows Police Sergeant Neil Howie as he investigates the disappearance of a young girl named Rowan Morrison on the isolated Scottish island of Summerisle. As he delves deeper, he discovers that the islanders practice a form of Celtic paganism and that he himself is intended to be a human sacrifice to ensure a bountiful harvest.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/1/11/The_Wicker_Man_%281973_film%29_UK_poster.jpg/250px-The_Wicker_Man_%281973_film%29_UK_poster.jpg",
     embedUrl: "https://archive.org/embed/the.-wicker.-man.-1973",
@@ -994,24 +1034,12 @@ const movies = [
     year: 1959,
     genre: ["horror"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "1h 27m",
+    language: "English",
     desc: "Frederick Loren has invited five strangers to a party of a lifetime. He is offering each of them $10,000 if they can stay the night in a house.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d1/The_House_On_Haunted_Hill.jpg/250px-The_House_On_Haunted_Hill.jpg",
     embedUrl: "https://archive.org/embed/house_on_haunted_hill_ipod",
-    embeddable: true,
-  },
-  {
-    id: 30,
-    title: "Things to Come",
-    year: 1936,
-    genre: ["sci-fi"],
-    source: "archive",
-    sourceName: "Archive.org",
-    duration: "1h 37m",
-    desc: "Based on H.G. Wells' novel, this film explores the future of humanity through war, plague, and technological advancement.",
-    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Things-to-Come-UK-poster.jpg/250px-Things-to-Come-UK-poster.jpg",
-    embedUrl: "https://archive.org/embed/acfrma-Things_To_Come_1936_-_Public_Domain_Movies__Full",
     embeddable: true,
   },
   {
@@ -1020,8 +1048,9 @@ const movies = [
     year: 1951,
     genre: ["comedy", "sci-fi"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "2h 21m",
+    language: "English",
     desc: "A satirical take on the future of society, technology, and human nature.",
     thumb: "https://imgs.search.brave.com/agN8VTMeqTwE1KYrrLYbfG5N1spRZBxAG-usOtndrds/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9yZXNp/emluZy5mbGl4c3Rl/ci5jb20vLVhaQWZI/Wk0zOVV3YUdKSUZX/S0FFOGZTMGFrPS92/My90L2Fzc2V0cy9w/MjI1NF9wX3Y4X2Fh/LmpwZw",
     embedUrl: "https://archive.org/embed/utopia",
@@ -1033,8 +1062,9 @@ const movies = [
     year: 1978,
     genre: ["sci-fi"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "2h 21m",
+    language: "English",
     desc: "An intelligence agent discovers a Nazi plot to revive the Third Reich by using clones.",
     thumb: "https://imgs.search.brave.com/ySmNu8G9q51wbaRt35cXLsORFjtrPiO6Vs4CCSC_ZM8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1Qk1EWXdZbVF6/WTJRdE9UTm1OeTAw/WVRNMUxXRmhOR010/WXpjM016WXdORGN3/WVdWbFhrRXlYa0Zx/Y0djQC5qcGc",
     embedUrl: "https://archive.org/embed/LuciferComplex",
@@ -1048,6 +1078,7 @@ const movies = [
     source: "plex",
     sourceName: "Plex",
     duration: "1h 27m",
+    language: "English",
     desc: "Derek and his friends must investigate the missing people in a small village. Then they find out its human formed aliens that are really big headed monsters that used all the people in the small village into their snack burgers. Now, Derek must save the day and the world with his chainsaw before the meat eaters strikes the whole planet. Will Derek kill all the aliens?",
     thumb: "https://imgs.search.brave.com/fJSvw_wJNWLk8BuhomKqHxSHYf9FtB6lG1ypbaiwpzY/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1Qll6Z3haRFJt/T0dFdFl6WTROUzAw/Tm1Wa0xUZ3laVGN0/WVdVd01USXdNRGhs/WldJMlhrRXlYa0Zx/Y0djQC5fVjFfLmpw/Zw",
     embeddable: false,
@@ -1061,6 +1092,7 @@ const movies = [
     source: "plex",
     sourceName: "Plex",
     duration: "1h 27m",
+    language: "English",
     desc: "A departing professor gathers his closest colleagues for an intimate farewell, but the night takes an unexpected turn when he shares a stunning secret about his past. As the conversation unfolds, skepticism and curiosity collide, challenging everything they thought they knew about history, science, and belief.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/3/3b/The_Man_from_Earth.png",
     embeddable: false,
@@ -1072,8 +1104,9 @@ const movies = [
     year: 1978,
     genre: ["sci-fi", "comedy"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "1h 43m",
+    language: "English",
     desc: "The future looks bleak for Captain Pirk. Originally from the far future, he traveled back to save the world, but was shipwrecked on the 21st century. The world of the past is a dangerous place and he is finding it difficult to convince the ladies he is, in fact, an intergalactic space hero from the future. To make things right Pirk comes up with a questionable plan to save mankind's future...",
     thumb: "https://upload.wikimedia.org/wikipedia/en/8/8d/Starwreck6_dvdcover.jpg",
     embedUrl: "https://archive.org/embed/StarWreckInThePirkining",
@@ -1087,6 +1120,7 @@ const movies = [
     source: "plex",
     sourceName: "Plex",
     duration: "1h 41m",
+    language: "English",
     desc: "Frustrated with babysitting on yet another weekend night, Sarah, a teenager with an active imagination, summons the Goblins to take her baby stepbrother away. When little Toby actually disappears, Sarah must follow him into a fantastical world to rescue him from the Goblin King. Guarding his castle is the labyrinth itself, a twisted maze of deception, populated with outrageous characters and unknown dangers.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Labyrinth_ver2.jpg/250px-Labyrinth_ver2.jpg",
     embeddable: false,
@@ -1100,6 +1134,7 @@ const movies = [
     source: "plex",
     sourceName: "Plex",
     duration: "1h 38m",
+    language: "English",
     desc: "When his son's body is found in a humiliating accident, a lonely high school teacher inadvertently attracts an overwhelming amount of community and media attention after covering up the truth with a phony suicide note.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f7/Worldsgreatestdad.jpg/250px-Worldsgreatestdad.jpg",
     embeddable: false,
@@ -1113,6 +1148,7 @@ const movies = [
     source: "plex",
     sourceName: "Plex",
     duration: "1h 39m",
+    language: "English",
     desc: "Naoto was ignored in school until Chihiro called his name. Years later, he locates her but she's changed. Obsessed, Naoto sneaks into her home and hides under her bed, crossing ethical boundaries in an unsettling manner.",
     thumb: "https://imgs.search.brave.com/mgOi115e3KLvAxJtY9S2L6lir65wDVW8P85qaHqvW0c/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9jYW52/YXMtbGIudHViaXR2/LmNvbS9vcHRzLzhH/eU83S3FnYWFhZFlB/PT0vYzdjYTc0Nzkt/ZDExMS00YTY3LTg4/ZmYtNzU3MTE0ODQx/YmRhL0NKZ0RFTWNF/T2dVeExqRXVPUT09",
     embeddable: false,
@@ -1124,8 +1160,9 @@ const movies = [
     year: 1962,
     genre: ["drama"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "11m",
+    language: "English",
     desc: "Two men discuss the nature of accidents and the possibility of nuclear war.",
     thumb: "https://imgs.search.brave.com/jmU1IqSVEscUGkDDIKDH7BZB68DoMLSF1mYZqQYpLhc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1Qk56STNNekUy/WkdRdFlqWTNaaTAw/WkRSaExXSXdZbUl0/TjJWbE5UVmhaRGhq/TmpKbFhrRXlYa0Zx/Y0djQC5qcGc",
     embedUrl: "https://archive.org/embed/TheHole",
@@ -1137,8 +1174,9 @@ const movies = [
     year: 1944,
     genre: ["drama"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "6m",
+    language: "English",
     desc: "Hairlock Combs and his assitant Gotsome, of 223 Baker St, attempt to solve the mystery of a disappearing dinosaur skeleton.",
     thumb: "https://imgs.search.brave.com/81fha1M4Bkf_TTFaSSVdCexV3fw-v5UP_VZpP-b_jy0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1Qk9HVTROamxq/WmpRdE1tTmlPUzAw/T1dWaUxXRTBPV010/TWpjM05qWXhaakJs/WVRVMFhrRXlYa0Zx/Y0djQC5qcGc",
     embedUrl: "https://archive.org/embed/TheCaseOfTheScreamingBishop",
@@ -1150,8 +1188,9 @@ const movies = [
     year: 1962,
     genre: ["comedy", "animation"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "52m",
+    language: "English",
     desc: "Mr. Magoo is heading to a theater on Broadway, where he is starring as Ebenezer Scrooge in a musical production based on A Christmas Carol. Due to Magoo's nearsightedness, he arrives 30 minutes late and accidentally injures the director (Its Great to Be Back on Broadway).",
     thumb: "https://upload.wikimedia.org/wikipedia/en/d/d0/MagooChristmas.jpg",
     embedUrl: "https://archive.org/embed/Mr.MagoosChristmasCarol1962",
@@ -1163,8 +1202,9 @@ const movies = [
     year: 1985,
     genre: ["drama"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "2h 22m",
+    language: "English",
     desc: "The film follows a young Belarusian boy named Flyora during the Nazi occupation of Byelorussia in World War II. As he joins a group of partisans, he witnesses horrific atrocities and the brutal realities of war, leading to a profound loss of innocence and a harrowing journey through despair and survival.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/0/08/Come_and_See_%28poster%29.jpg/250px-Come_and_See_%28poster%29.jpg",
     embedUrl: "https://archive.org/embed/come.-and.-see.-1985",
@@ -1176,8 +1216,9 @@ const movies = [
     year: 1954,
     genre: ["drama"],
     source: "archive",
-    sourceName: "Archive.org",
+    sourceName: "Internet Archive",
     duration: "1h 11m",
+    language: "English",
     desc: "Jail Bait is a 1954 American drama film directed by Robert S. Baker and starring James Cagney, Ann Blyth, and Robert Stack. The film follows the story of a young woman who is sent to a reform school after being caught stealing.",
     thumb: "https://imgs.search.brave.com/AxqHNBFgwgo26NjSbSz2BzQUNFHGjBj5Eckk32mq4vY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGxleC50di9w/aG90bz9zaXplPWxh/cmdlLTE5MjAmc2Nh/bGU9MSZ1cmw9aHR0/cHM6Ly9tZXRhZGF0/YS1zdGF0aWMucGxl/eC50di82L2dyYWNl/bm90ZS82OGU0NWYy/OTVkYTFhZjFmYTg1/Mzc2MTI4ZWQ0NzUw/Yi5qcGc",
     embedUrl: "https://archive.org/embed/JailBait",
@@ -1189,31 +1230,81 @@ const movies = [
     year: 1954,
     genre: ["sci-fi", "horror"],
     source: "archive",
-    sourceName: "Archive.org",
+    language: "Japanese (English subtitles available)",
+    sourceName: "Internet Archive",
     duration: "1h 11m",
-    desc: "Disclaimer: THIS MOVIE IS NOT IN ENGLISH! ENGLISH SUBTITLES AVAILABLE! Godzilla is a 1954 Japanese science fiction film directed by Ishirō Honda and starring Akira Takarada, Eiko Masuda, and Kimiyoshi Yasuda. The film follows the story of a giant monster named Godzilla who emerges from the sea and causes destruction.",
+    desc: "Godzilla is a 1954 Japanese science fiction film directed by Ishirō Honda and starring Akira Takarada, Eiko Masuda, and Kimiyoshi Yasuda. The film follows the story of a giant monster named Godzilla who emerges from the sea and causes destruction.",
     thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Gojira_1954_Japanese_poster.jpg/250px-Gojira_1954_Japanese_poster.jpg",
     embedUrl: "https://archive.org/embed/godzilla-1954-colorized",
     embeddable: true,
   },
   {
-    id: 38,
+    id: 45,
     title: "The Brother from Another Planet",
     year: 1984,
     genre: ["sci-fi", "comedy"],
     source: "plex",
     sourceName: "Plex",
     duration: "1h 48m",
+    language: "English",
     desc: "The Brother is an alien who has crash-landed on Earth, in New York City. While mute, strongly empathic, and able to fix things, he resembles a Black man with strange feet. His attempt to make a place for himself in Harlem is an allegory for the immigrant experience in the United States. Meanwhile, two bounty hunters from the Brother's home planet arrive and try to capture him.",
     thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/e/ea/Brofromotherplanet.jpg/250px-Brofromotherplanet.jpg",
     watchUrl: "https://watch.plex.tv/movie/the-brother-from-another-planet"
   },
+  {
+    id: 46,
+    title: "Shortbus",
+    year: 2006,
+    genre: ["drama"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "1h 48m",
+    language: "English",
+    desc: "In post-9/11 New York City, an eclectic group of citizens find their lives entangled, personally, romantically, and sexually, at Shortbus, an underground Brooklyn salon infamous for its blend of art, music, politics, and carnality.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e2/ShortbusPoster1.jpg/250px-ShortbusPoster1.jpg",
+    watchUrl: "https://watch.plex.tv/movie/shortbus"
+  },
+  {
+    id: 47,
+    title: "20 Year Old Virgins",
+    year: 2011,
+    genre: ["comedy"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "1h 37m",
+    language: "English",
+    desc: "A coming-of-age story about two dim-witted 20-year-old roommates, Gene and Eugene, and their quest to lose their virginity.",
+    thumb: "https://imgs.search.brave.com/jxTyLJrCH6IjDzzFNQfFzk9kETgf2VKAbrbXRI7n03k/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9yZXNp/emluZy5mbGl4c3Rl/ci5jb20vLVhaQWZI/Wk0zOVV3YUdKSUZX/S0FFOGZTMGFrPS92/My90L2Fzc2V0cy9w/MTA0Nzk2MzBfdl92/OF9hYi5qcGc",
+    watchUrl: "https://watch.plex.tv/movie/20-year-old-virgins"
+  },
+  {
+    id: 48,
+    title: "Somewhere in Time",
+    year: 1980,
+    genre: ["drama"],
+    source: "plex",
+    sourceName: "Plex",
+    duration: "1h 43m",
+    language: "English",
+    desc: "Young writer Richard Collier is met on the opening night of his first play by an old lady who begs him to Come back to me. Mystified, he tries to find out about her, and learns that she is a famous stage actress from the early twentieth century. Becoming more and more obsessed with her, by self-hypnosis he manages to travel back in time—where he meets her.",
+    thumb: "https://imgs.search.brave.com/jxTyLJrCH6IjDzzFNQfFzk9kETgf2VKAbrbXRI7n03k/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9yZXNp/emluZy5mbGl4c3Rl/ci5jb20vLVhaQWZI/Wk0zOVV3YUdKSUZX/S0FFOGZTMGFrPS92/My90L2Fzc2V0cy9w/MTA0Nzk2MzBfdl92/OF9hYi5qcGc",
+    watchUrl: "https://watch.plex.tv/movie/somewhere-in-time"
+  },
 ];
 
+
+const adultMovieIds = [17, 31, 45, 46, 47];
+
+function safeMovies() {
+  return safeMode
+    ? movies.filter(m => !adultMovieIds.includes(m.id))
+    : movies;
+}
 
 function sourceClass(src) {
   return { yt: 'src-yt', archive: 'src-archive', plex: 'src-plex' }[src] || 'src-archive';
 }
+
 function sourceLabel(src) {
   return { yt: 'YouTube', archive: 'Archive.org', plex: 'Plex' }[src] || src;
 }
@@ -1221,17 +1312,21 @@ function sourceLabel(src) {
 function cardHTML(m) {
   const srcCls = sourceClass(m.source);
   const srcLbl = sourceLabel(m.source);
+
   const thumb = m.thumb
-    ? `<img class="card-thumb" src="${m.thumb}" alt="${m.title}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+    ? `<img class="card-thumb" src="${m.thumb}" alt="${m.title}" loading="lazy"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
     : '';
+
   const placeholder = `<div class="card-thumb-placeholder" style="${m.thumb ? 'display:none' : ''}">No Preview</div>`;
+
   return `
     <div class="card" onclick="openMovie(movies.find(x=>x.id===${m.id}))">
       ${thumb}${placeholder}
       <div class="card-info">
         <div class="card-title">${m.title}</div>
         <div class="card-meta">
-          <span class="card-year">${m.year}</span>
+          <span class="card-year">${m.year} • ${m.language || "Unknown"}</span>
           <span class="card-source ${srcCls}">${srcLbl}</span>
         </div>
       </div>
@@ -1243,79 +1338,117 @@ let activeSource = null;
 
 function renderRows(list) {
   const main = document.getElementById('main-content');
+
   if (!list.length) {
     main.innerHTML = '<div style="padding:60px 48px;color:#666;font-size:18px;">No movies found for this filter.</div>';
     return;
   }
+
   const bySource = {};
   list.forEach(m => {
     if (!bySource[m.source]) bySource[m.source] = [];
     bySource[m.source].push(m);
   });
+
   let html = '';
-  const order = ['archive','yt','plex'];
+  const order = ['archive', 'yt', 'plex'];
+
   const rowTitles = {
     archive: 'Internet Archive',
-    yt: 'Youtube',
+    yt: 'YouTube',
     plex: 'Plex'
   };
+
   order.forEach(src => {
     if (!bySource[src]) return;
-    html += `<div class="row"><div class="row-title">${rowTitles[src] || src}</div><div class="cards">`;
-    bySource[src].forEach(m => { html += cardHTML(m); });
-    html += '</div></div>';
+
+    html += `<div class="row">
+      <div class="row-title">${rowTitles[src] || src}</div>
+      <div class="cards">`;
+
+    bySource[src].forEach(m => {
+      html += cardHTML(m);
+    });
+
+    html += `</div></div>`;
   });
+
   main.innerHTML = html;
 }
 
 function filterAll() {
-  activeGenre = 'all'; activeSource = null;
+  activeGenre = 'all';
+  activeSource = null;
+
   document.getElementById('search-overlay').classList.remove('open');
-  document.getElementById('searchInput').value = '';
   document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
   document.querySelector('.filter-tag').classList.add('active');
-  renderRows(movies);
+
+  renderRows(safeMovies());
 }
 
 function filterByGenre(genre, el) {
-  activeGenre = genre; activeSource = null;
+  activeGenre = genre;
+  activeSource = null;
+
   document.getElementById('search-overlay').classList.remove('open');
   document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+
   if (el) el.classList.add('active');
-  const list = genre === 'all' ? movies : movies.filter(m => m.genre.includes(genre));
+
+  const list = genre === 'all'
+    ? safeMovies()
+    : safeMovies().filter(m => m.genre.includes(genre));
+
   renderRows(list);
 }
 
 function filterBySource(src) {
-  activeSource = src; activeGenre = 'all';
+  activeSource = src;
+  activeGenre = 'all';
+
   document.getElementById('search-overlay').classList.remove('open');
-  document.getElementById('searchInput').value = '';
-  renderRows(movies.filter(m => m.source === src));
+
+  renderRows(safeMovies().filter(m => m.source === src));
 }
 
 function handleSearch(val) {
   const overlay = document.getElementById('search-overlay');
   const grid = document.getElementById('search-grid');
   const label = document.getElementById('search-label');
-  if (!val.trim()) { overlay.classList.remove('open'); return; }
+
+  if (!val.trim()) {
+    overlay.classList.remove('open');
+    return;
+  }
+
   overlay.classList.add('open');
+
   const q = val.toLowerCase();
-  const res = movies.filter(m =>
+
+  const res = safeMovies().filter(m =>
     m.title.toLowerCase().includes(q) ||
     m.genre.some(g => g.includes(q)) ||
     m.sourceName.toLowerCase().includes(q)
   );
-  label.textContent = res.length ? `${res.length} result${res.length>1?'s':''} for "${val}"` : `No results for "${val}"`;
+
+  label.textContent = res.length
+    ? `${res.length} result${res.length > 1 ? 's' : ''} for "${val}"`
+    : `No results for "${val}"`;
+
   grid.innerHTML = res.map(m => cardHTML(m)).join('');
 }
 
 function openMovie(m) {
   if (!m) return;
+
   const modal = document.getElementById('modal');
   const video = document.getElementById('modal-video');
+
   video.className = "modal-video-wrapper";
   video.classList.add(m.embeddable ? "embed" : "external");
   video.classList.add("contribute");
+
   const srcBadge = document.getElementById('modal-src-badge');
   const titleEl = document.getElementById('modal-title');
   const metaEl = document.getElementById('modal-meta');
@@ -1324,35 +1457,85 @@ function openMovie(m) {
 
   titleEl.textContent = m.title;
   descEl.textContent = m.desc;
-  metaEl.innerHTML = `<span>${m.year}</span><span>${m.duration}</span><span>${m.genre.join(', ')}</span>`;
+  metaEl.innerHTML = `
+    <span>${m.year}</span>
+    <span>${m.duration}</span>
+    <span>${m.genre.join(', ')}</span>
+    ${m.language ? `<span>${m.language}</span>` : ``}
+  `;
+
   srcBadge.textContent = '▶ Streaming on ' + m.sourceName;
   srcBadge.className = 'modal-source-banner ' + (m.embeddable ? m.source : 'ext');
 
   if (m.embeddable && m.embedUrl) {
-    video.innerHTML = `<iframe
-  src="${m.embedUrl}"
-  allow="autoplay; fullscreen; picture-in-picture"
-  allowfullscreen
-  loading="lazy"
-  referrerpolicy="no-referrer-when-downgrade"
-  style="border:0"
-  title="${m.title}">
-</iframe>`;
-    noteEl.innerHTML = `🔗 This video is embedded directly from <strong>${m.sourceName}</strong>. All rights belong to the original creators/publishers. Free and legal to watch.`;
+    video.innerHTML = `<iframe src="${m.embedUrl}"
+      allow="autoplay; fullscreen; picture-in-picture"
+      allowfullscreen
+      style="border:0"
+      title="${m.title}"></iframe>`;
+
+    noteEl.innerHTML = `Embedded from <strong>${m.sourceName}</strong>.`;
   } else {
     video.innerHTML = `
       <div class="external-placeholder">
         <div class="external-icon">📺</div>
         <div class="external-title">${m.title}</div>
-        <div class="external-note">This title is available on <strong>${m.sourceName}</strong>. Click below to watch it there — it's completely free and legal.</div>
-        <a class="btn-external" href="${m.watchUrl}" target="_blank" rel="noopener noreferrer">▶ Watch on ${m.sourceName} ↗</a>
+        <div class="external-note">Open externally on ${m.sourceName}</div>
+        <a class="btn-external" href="${m.watchUrl}" target="_blank">▶ Watch</a>
       </div>`;
-    noteEl.innerHTML = `🔗 <strong>${m.sourceName}</strong> does not allow direct embedding. Click "Watch on ${m.sourceName}" above to open it in a new tab — free & legal.`;
+
+    noteEl.innerHTML = `${m.sourceName} requires external viewing.`;
   }
 
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modal-video').innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+function updateAdultButton() {
+  const btn = document.getElementById("safeToggle");
+  if (!btn) return;
+
+  btn.textContent = safeMode ? "Safe Mode: ON" : "Safe Mode: OFF";
+  btn.classList.toggle("off", !safeMode);
+}
+
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+renderRows(safeMovies());
+updateAdultButton();
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("safeToggle");
+
+  const saved = localStorage.getItem("safeMode");
+  if (saved !== null) safeMode = saved === "true";
+
+  function renderAll() {
+    renderRows(safeMovies());
+    updateAdultButton();
+  }
+
+  btn.addEventListener("click", () => {
+    safeMode = !safeMode;
+    localStorage.setItem("safeMode", safeMode);
+
+    renderAll();
+  });
+
+  renderAll();
+});
 
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
@@ -1385,68 +1568,44 @@ function openContributeModal() {
             </a>
         </div>`;
 
-descEl.innerHTML = `
-    <strong>Prerequisites:</strong><br><br>
+    descEl.innerHTML = `
+        <strong>Prerequisites:</strong><br><br>
 
-    • Git.<br>
-    • A GitHub account.<br>
-    • Basic familiarity with GitHub (forking repositories and opening Pull Requests). If you do not have that experience then <a href="https://www.youtube.com/watch?v=nCKdihvneS0">watch this video</a> <br>
-    • A free and legal movie source (YouTube, Archive.org, Plex, etc.).<br>
-    • A thumbnail image URL for the movie.<br>
-    • Optional: Visual Studio Code and Python 3 for local testing.<br><br>
+        • Git.<br>
+        • A GitHub account.<br>
+        • Basic familiarity with GitHub (forking repositories and opening Pull Requests). If you do not have that experience then <a href="https://www.youtube.com/watch?v=nCKdihvneS0">watch this video</a> <br>
+        • A free and legal movie source (YouTube, Archive.org, Plex, etc.).<br>
+        • A thumbnail image URL for the movie.<br>
+        • Optional: Visual Studio Code and Python 3 for local testing.<br><br>
 
-    <strong>How to contribute:</strong><br><br>
+        <strong>How to contribute:</strong><br><br>
 
-    1. Fork the FreeFlix repository on GitHub.<br>
-    2. Open the HTML file containing the <code>movies</code> array.<br>
-    3. Copy an existing movie object and edit it with your movie's information.<br>
-    4. Test your changes locally.<br>
-    5. Commit your changes and open a Pull Request.<br><br>
+        1. Fork the FreeFlix repository on GitHub.<br>
+        2. Open the HTML file containing the <code>movies</code> array.<br>
+        3. Copy an existing movie object and edit it with your movie's information.<br>
+        4. Test your changes locally.<br>
+        5. Commit your changes and open a Pull Request.<br><br>
 
-    <strong>Movie Object Structure:</strong><br><br>
+        <strong>Field explanations:</strong><br><br>
 
-    <pre style="white-space: pre-wrap; background:#111; padding:12px; border-radius:6px; overflow:auto;">
-{
-  id: 22, // Unique identifier. Every movie must have its own ID.
-  title: "Movie name", // The title shown on FreeFlix.
-  year: 2013, // Release year.
-  genre: ["sci-fi", "thriller"], // One or more genres.
-  source: "yt", // Source identifier: yt, archive, or plex.
-  sourceName: "YouTube", // Human-readable source name.
-  duration: "1h 29m", // Runtime.
-  desc: "Movie description.", // Short summary.
-  thumb: "https://example.com/poster.jpg", // Thumbnail image URL.
+        • <code>id</code> → Must be unique. Check existing movies before choosing one.<br>
+        • <code>title</code> → The movie's name.<br>
+        • <code>year</code> → Release year.<br>
+        • <code>genre</code> → Genres used by filters and search.<br>
+        • <code>source</code> → Internal identifier (<code>yt</code>, <code>archive</code>, or <code>plex</code>).<br>
+        • <code>sourceName</code> → Display name shown to users.<br>
+        • <code>duration</code> → Runtime shown on the movie page.<br>
+        • <code>desc</code> → Brief description of the movie.<br>
+        • <code>thumb</code> → Poster or thumbnail image URL. I recommend going on Wikimedia for images but it does not matter anyway.<br>
+        • <code>embedUrl</code> → Used when the movie can be embedded directly.<br>
+        • <code>watchUrl</code> → Used when users must be redirected externally.<br>
+        • <code>embeddable</code> → Set to <code>true</code> for embeds and <code>false</code> for external links.<br><br>
 
-  // For embeddable movies:
-  embedUrl: "https://www.youtube.com/embed/VIDEO_ID or https://archive.org/embed/IDENTIFIER",
-  embeddable: true
-
-  // For non-embeddable movies use:
-  // watchUrl: "https://youtube.com/watch/VIDEO_ID or https://archive.org/details/IDENTIFIER or Plex URL",
-  // embeddable: false
-}
-    </pre>
-
-    <strong>Field explanations:</strong><br><br>
-
-    • <code>id</code> → Must be unique. Check existing movies before choosing one.<br>
-    • <code>title</code> → The movie's name.<br>
-    • <code>year</code> → Release year.<br>
-    • <code>genre</code> → Genres used by filters and search.<br>
-    • <code>source</code> → Internal identifier (<code>yt</code>, <code>archive</code>, or <code>plex</code>).<br>
-    • <code>sourceName</code> → Display name shown to users.<br>
-    • <code>duration</code> → Runtime shown on the movie page.<br>
-    • <code>desc</code> → Brief description of the movie.<br>
-    • <code>thumb</code> → Poster or thumbnail image URL. I recommend going on Wikimedia for images but it does not matter anyway.<br>
-    • <code>embedUrl</code> → Used when the movie can be embedded directly.<br>
-    • <code>watchUrl</code> → Used when users must be redirected externally.<br>
-    • <code>embeddable</code> → Set to <code>true</code> for embeds and <code>false</code> for external links.<br><br>
-
-    Pull Requests containing pirated content, broken links, duplicate movies, or invalid object structures may be rejected. Also put a disclaimer if a movie is not in English or has no subtitles. If your PR is rejected, don't be discouraged! Just ask for feedback and try again. Thanks for helping make FreeFlix better!
-`;
+        Pull Requests containing pirated content, broken links, duplicate movies, or invalid object structures may be rejected. If your PR is rejected, don't be discouraged! Just ask for feedback and try again. Thanks for helping make FreeFlix better!
+    `;
 
     noteEl.innerHTML =
-        "🔗 All submissions are reviewed by AramCZ before being added to FreeFlix.";
+        "🔗 All submissions are reviewed before being added to FreeFlix.";
 
     modal.classList.add('open');
     titleEl.textContent = "Contribute to FreeFlix";
@@ -1456,16 +1615,62 @@ descEl.innerHTML = `
     document.body.style.overflow = 'hidden';
 }
 
-document.getElementById('modal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+function openFAQModal() {
+    const modal = document.getElementById('modal');
+    const video = document.getElementById('modal-video');
+    const titleEl = document.getElementById('modal-title');
+    const metaEl = document.getElementById('modal-meta');
+    const descEl = document.getElementById('modal-desc');
+    const noteEl = document.getElementById('modal-embed-note');
+    const srcBadge = document.getElementById('modal-src-badge');
 
-window.addEventListener('scroll', () => {
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-});
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
 
-renderRows(movies);
+    video.className = "modal-video-wrapper external";
+
+    video.innerHTML = `
+        <div class="external-placeholder">
+            <div class="external-icon">❓</div>
+            <div class="external-title">FreeFlix FAQ</div>
+            <div class="external-note">
+                Common questions about how FreeFlix works
+            </div>
+        </div>
+    `;
+
+    titleEl.textContent = "FAQ";
+    metaEl.innerHTML = "";
+    noteEl.innerHTML = "";
+    srcBadge.textContent = "Help Center";
+    srcBadge.className = "modal-source-banner ext";
+
+    descEl.innerHTML = `
+        <strong>What is FreeFlix?</strong><br>
+        A free movie browser that links to content from YouTube, Archive.org, and Plex.<br><br>
+
+        <strong>Do you host movies?</strong><br>
+        No. Everything is embedded or linked from external sources.<br><br>
+
+        <strong>Why doesn’t a movie play?</strong><br>
+        The source removed it or disabled embedding.<br><br>
+
+        <strong>What is Safe Mode?</strong><br>
+        It hides selected mature content from the library.<br><br>
+
+        <strong>How do I add movies?</strong><br>
+        Use “Add Movies” → follow GitHub instructions.<br><br>
+
+        <strong>Is FreeFlix legal?</strong><br>
+        Yes. It only indexes publicly available content. <br><br>
+
+        <strong>Is Who made this site?</strong><br>
+        One nerd named Aram. <br><br>
+
+        <strong>How can I support this project?</strong><br>
+        You can't. But you can contribute by adding movies or reporting issues on GitHub. <br><br>
+    `;
+}
 </script>
 
 <footer style="padding: 24px 48px; color:#777; font-size:12px; text-align:center; border-top:1px solid #222;">
