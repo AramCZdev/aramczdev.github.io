@@ -583,13 +583,13 @@
 <section id="hero">
   <div id="hero-bg"></div>
   <div class="hero-content">
-    <span class="source-badge archive" id="hero-badge"><span class="dot"></span> Youtube</span>
-    <div class="hero-title" id="hero-title">The Oddsockeaters</div>
+    <span class="source-badge archive" id="hero-badge"><span class="dot"></span>Youtube</span>
+    <div class="hero-title" id="hero-title">Just Visiting</div>
     <div class="hero-meta">
-      <span>2016</span>
-      <span>1h 26m</span>
+      <span>2001</span>
+      <span>1h 28m</span>
     </div>
-    <p class="hero-desc" id="hero-desc">The Oddsockeaters are small creatures that live among humans and secretly take one sock from every pair. The story follows HIHLÍK, a young Oddsockeater who, after losing his grandfather LAMOR, sets out to find his uncle PADR. Along the way, he learns about family, rules, and what it means to break them in search of something bigger.
+    <p class="hero-desc" id="hero-desc">The film takes place in 12th-century England, where Count Thibault Malefète is about to marry Princess Rosalind, the daughter of the reigning King Henry. At the wedding banquet, an enemy known as the Earl of Warwick accidentally gives Thibault a potion which makes him hallucinate (and which was actually intended for Rosalind by a witch hired by the Earl), and under its influence, he kills his own bride Princess Rosalind believing she is a ferocious monster. While under sentence of death, he asks his servant, André Le Paté to find a wizard to help him. The wizard gives him a potion that will send him back to the moment before he killed Princess Rosalind. The wizard botches the spell, and instead, Thibault and André are sent into the 21st century.
     </p>
     <div class="hero-buttons">
       <button class="btn-play" onclick="openMovie(movies[18])">▶ Play</button>
@@ -1043,6 +1043,20 @@ const movies = [
     embeddable: true,
   },
   {
+    id: 30,
+    title: "Just Visiting",
+    year: 2001,
+    genre: ["drama"],
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 28m",
+    language: "English",
+    desc: "The film takes place in 12th-century England, where Count Thibault Malefète is about to marry Princess Rosalind, the daughter of the reigning King Henry. At the wedding banquet, an enemy known as the Earl of Warwick accidentally gives Thibault a potion which makes him hallucinate (and which was actually intended for Rosalind by a witch hired by the Earl), and under its influence, he kills his own bride Princess Rosalind believing she is a ferocious monster. While under sentence of death, he asks his servant, André Le Paté to find a wizard to help him. The wizard gives him a potion that will send him back to the moment before he killed Princess Rosalind. The wizard botches the spell, and instead, Thibault and André are sent into the 21st century.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/8/8e/Just_visiting01.jpg",
+    embedUrl: "https://www.youtube.com/embed/LsoOhh3eSE8",
+    embeddable: true,
+  },
+  {
     id: 31,
     title: "Utopia",
     year: 1951,
@@ -1266,16 +1280,18 @@ const movies = [
   },
   {
     id: 47,
-    title: "20 Year Old Virgins",
-    year: 2011,
+    title: "Night At the Museum",
+    year: 2006,
     genre: ["comedy"],
-    source: "plex",
-    sourceName: "Plex",
-    duration: "1h 37m",
+    source: "yt",
+    sourceName: "YouTube",
+    duration: "1h 23m",
     language: "English",
-    desc: "A coming-of-age story about two dim-witted 20-year-old roommates, Gene and Eugene, and their quest to lose their virginity.",
-    thumb: "https://imgs.search.brave.com/jxTyLJrCH6IjDzzFNQfFzk9kETgf2VKAbrbXRI7n03k/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9yZXNp/emluZy5mbGl4c3Rl/ci5jb20vLVhaQWZI/Wk0zOVV3YUdKSUZX/S0FFOGZTMGFrPS92/My90L2Fzc2V0cy9w/MTA0Nzk2MzBfdl92/OF9hYi5qcGc",
-    watchUrl: "https://watch.plex.tv/movie/20-year-old-virgins"
+    desc: "It tells the story of a divorced father who applies for a job as a night watchman at New York City's American Museum of Natural History and subsequently discovers that the exhibits come to life at night, animated by a magical Egyptian artifact and must find a way to keep them under control.",
+    language: "English",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/3/34/Night_at_the_Museum_poster.jpg/250px-Night_at_the_Museum_poster.jpg",
+    embedUrl: "https://www.youtube.com/embed/uwHVkCLHVmM",
+    embeddable: true,
   },
   {
     id: 48,
@@ -1293,7 +1309,7 @@ const movies = [
 ];
 
 
-const adultMovieIds = [17, 31, 45, 46, 47];
+const adultMovieIds = [17, 31, 45, 46];
 
 function safeMovies() {
   return safeMode
