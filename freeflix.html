@@ -165,6 +165,33 @@
   }
   .btn-info:hover { background: rgba(109,109,110,0.9); }
 
+  .playlist-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .playlist-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    background: #fff;
+    color: #000;
+  }
+  .playlist-btn.secondary {
+    background: #2a2a2a;
+    color: #fff;
+    border: 1px solid #444;
+    text-decoration: none;
+  }
+  .playlist-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
   /* ROWS */
   main { padding-bottom: 60px; }
   .row { padding: 0 48px; margin-bottom: 40px; }
@@ -568,7 +595,7 @@
     <a onclick="filterBySource('yt')">YouTube</a>
     <a onclick="filterBySource('archive')">Archive.org</a>
     <a onclick="filterBySource('plex')">Plex</a>
-    <a onclick="openContributeModal()">Add Movies</a>
+    <a onclick="openContributeModal()">Add Movies/Series</a>
     <a onclick="openFAQModal()">FAQ</a>
     <button id="safeToggle" class="safe-btn">Safe Mode: ON</button>
 </div>
@@ -620,6 +647,7 @@
       <div class="modal-meta" id="modal-meta"></div>
       <p class="modal-desc" id="modal-desc"></p>
       <div class="modal-embed-note" id="modal-embed-note"></div>
+      <div class="playlist-controls" id="playlist-controls"></div>
     </div>
   </div>
 </div>
@@ -677,8 +705,7 @@ const movies = [
     desc: "Fritz Lang sci-fi masterpiece.",
     thumb: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Greetings_from_Metropolis%2C_Illinois%2C_Fort_Massac_State_Park_-_Large_Letter_Postcard_%285885063171%29.jpg/960px-Greetings_from_Metropolis%2C_Illinois%2C_Fort_Massac_State_Park_-_Large_Letter_Postcard_%285885063171%29.jpg",
     embedUrl: "https://www.youtube.com/embed/_q25QpZXfoU",
-    embeddable: true,
-    watchUrl: null
+    embeddable: null,
   },
   {
     id: 4,
@@ -1319,6 +1346,47 @@ const movies = [
     thumb: "https://imgs.search.brave.com/sGEGYAl9Zt2LxXX-5Ps5B7ONr3s-G4IvEgmt24HLaQw/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1Qk5qSmpOamhq/TURVdE5ESmpNQzAw/Wm1FNUxUbGtOMlV0/TldJMFlqWTRaR05t/WldFM1hrRXlYa0Zx/Y0djQC5fVjFfLmpw/Zw",
     watchUrl: "https://watch.plex.tv/movie/somewhere-in-time"
   },
+  {
+    id: 49,
+    title: "The Million Dollar Kid",
+    year: 1944,
+    genre: ["comedy"],
+    source: "archive",
+    language: "English",
+    sourceName: "Internet Archive",
+    duration: "1h 5m",
+    desc: "In ridding the area of muggers, the East Side Boys acquire a wealthy benefactor whose privileged son, unbeknownst to him, has fallen in with thugs.",
+    thumb: "https://imgs.search.brave.com/YmVTDAuYPZff2HSBMKs2ZeG7Uj76MviuT3jQXpFFAfc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bGF2YW5ndWFyZGlh/LmNvbS9wZWxpY3Vs/YXMtc2VyaWVzL2lt/YWdlcy9tb3ZpZS9w/b3N0ZXIvMTk0NC8y/L3czMDAveUlyYXAy/ZXVwQW1DTFBoWXBW/WmdnV3lqc2RvLmpw/Zw",
+    embedUrl: "https://archive.org/embed/the_million_dollar_kid",
+    embeddable: true,
+  },
+  {
+    id: 50,
+    title: "The Amazing Digital Circus",
+    year: 2023,
+    type: "series",
+    genre: ["drama", "comedy"],
+    source: "yt",
+    sourceName: "YouTube",
+    language: "English",
+    desc: "The Amazing Digital Circus is a psychological dark comedy about cute cartoon characters who hate their lives and want to leave",
+    thumb: "https://imgs.search.brave.com/p1T2EhwL9LHoghz5ZXAwCUPWmXygmvWL0spHrMBor2E/rs:fit:200:200:1:0/g:ce/aHR0cDovL2dsaXRj/aHByb2R1Y3Rpb25z/LnN0b3JlL2Nkbi9z/aG9wL2ZpbGVzL3Ro/ZS1hbWF6aW5nLWRp/Z2l0YWwtY2lyY3Vz/LXBvc3Rlci0xLnBu/Zz92PTE3NjIyMzIy/OTA",
+    playlistUrl: "https://www.youtube.com/playlist?list=PLHovnlOusNLgvAbnxluXCVB3KLj8e4QB-",
+    embeddable: false
+  },
+  {
+    id: 51,
+    title: "Malcolm in the Middle",
+    year: 2000,
+    genre: ["comedy"],
+    source: "archive",
+    language: "English",
+    sourceName: "Internet Archive",
+    desc: "Malcolm in the Middle is an American television sitcom created by Linwood Boomer for the Fox Broadcasting Company. The series premiered on January 9, 2000, and ended on May 14, 2006, after seven seasons consisting of 151 episodes. The single-camera series is a comedy that follows a dysfunctional middle-class family and stars Frankie Muniz in the lead role as Malcolm, a child prodigy. The ensemble cast includes Bryan Cranston and Jane Kaczmarek as Malcolm's parents, Hal and Lois. Christopher Kennedy Masterson, Justin Berfield, and Erik Per Sullivan appear as Malcolm's brothers, Francis, Reese, and Dewey, respectively. Typical plots revolve around the family's dysfunctional relationships and inability to fit into society, with Malcolm regularly making asides to the camera to comment on their failures. Another brother, Jamie (James and Lukas Rodriguez), was introduced as the fifth son of Hal and Lois at the end of season four, with a further pregnancy in the series finale alluding to a sixth child.",
+    thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/MitM_credits_logo.jpg/250px-MitM_credits_logo.jpg",
+    playlistUrl: "https://archive.org/details/malcolm-in-the-middle-complete-series-2000-2006",
+    embeddable: false,
+  },
 ];
 
 
@@ -1350,7 +1418,7 @@ function cardHTML(m) {
   const placeholder = `<div class="card-thumb-placeholder" style="${m.thumb ? 'display:none' : ''}">No Preview</div>`;
 
   return `
-    <div class="card" onclick="openMovie(movies.find(x=>x.id===${m.id}))">
+    <div class="card" onclick="openMovie(movies.find(x=>x.id===${m.id}), currentPlaylistItems)">
       ${thumb}${placeholder}
       <div class="card-info">
         <div class="card-title">${m.title}</div>
@@ -1364,6 +1432,8 @@ function cardHTML(m) {
 
 let activeGenre = 'all';
 let activeSource = null;
+let currentPlaylistItems = [];
+let currentPlaylistIndex = -1;
 
 function renderRows(list) {
   const main = document.getElementById('main-content');
@@ -1402,6 +1472,8 @@ function renderRows(list) {
     html += `</div></div>`;
   });
 
+  currentPlaylistItems = Array.isArray(list) ? list : [];
+  currentPlaylistIndex = -1;
   main.innerHTML = html;
 }
 
@@ -1461,6 +1533,9 @@ function handleSearch(val) {
     m.sourceName.toLowerCase().includes(q)
   );
 
+  currentPlaylistItems = res;
+  currentPlaylistIndex = -1;
+
   label.textContent = res.length
     ? `${res.length} result${res.length > 1 ? 's' : ''} for "${val}"`
     : `No results for "${val}"`;
@@ -1468,14 +1543,62 @@ function handleSearch(val) {
   grid.innerHTML = res.map(m => cardHTML(m)).join('');
 }
 
-function openMovie(m) {
+function updatePlaylistControls(m) {
+  const controls = document.getElementById('playlist-controls');
+  if (!controls) return;
+
+  if (!m || !currentPlaylistItems.length || currentPlaylistItems.length < 2) {
+    controls.innerHTML = '';
+    return;
+  }
+
+  const prevDisabled = currentPlaylistIndex <= 0;
+  const nextDisabled = currentPlaylistIndex >= currentPlaylistItems.length - 1;
+
+  controls.innerHTML = `
+    <button class="playlist-btn secondary" ${prevDisabled ? 'disabled' : ''} onclick="playPreviousMovie()">◀ Prev</button>
+    <button class="playlist-btn" ${nextDisabled ? 'disabled' : ''} onclick="playNextMovie()">Next ▶</button>
+  `;
+}
+
+function playNextMovie() {
+  if (!currentPlaylistItems.length) return;
+  const nextIndex = currentPlaylistIndex < 0
+    ? 0
+    : (currentPlaylistIndex + 1) % currentPlaylistItems.length;
+  currentPlaylistIndex = nextIndex;
+  openMovie(currentPlaylistItems[nextIndex], currentPlaylistItems);
+}
+
+function playPreviousMovie() {
+  if (!currentPlaylistItems.length) return;
+  const prevIndex = currentPlaylistIndex < 0
+    ? currentPlaylistItems.length - 1
+    : (currentPlaylistIndex <= 0 ? currentPlaylistItems.length - 1 : currentPlaylistIndex - 1);
+  currentPlaylistIndex = prevIndex;
+  openMovie(currentPlaylistItems[prevIndex], currentPlaylistItems);
+}
+
+function openMovie(m, playlist = null) {
   if (!m) return;
+
+  if (playlist && playlist.length) {
+    currentPlaylistItems = playlist;
+    currentPlaylistIndex = currentPlaylistItems.findIndex(item => item.id === m.id);
+    if (currentPlaylistIndex < 0) currentPlaylistIndex = -1;
+  } else {
+    currentPlaylistItems = [];
+    currentPlaylistIndex = -1;
+  }
 
   const modal = document.getElementById('modal');
   const video = document.getElementById('modal-video');
 
+  const isEmbeddable = m.embeddable === true;
+  const isUnavailable = m.embeddable == null;
+
   video.className = "modal-video-wrapper";
-  video.classList.add(m.embeddable ? "embed" : "external");
+  video.classList.add(isEmbeddable ? "embed" : "external");
   video.classList.add("contribute");
 
   const srcBadge = document.getElementById('modal-src-badge');
@@ -1493,10 +1616,29 @@ function openMovie(m) {
     ${m.language ? `<span>${m.language}</span>` : ``}
   `;
 
-  srcBadge.textContent = '▶ Streaming on ' + m.sourceName;
-  srcBadge.className = 'modal-source-banner ' + (m.embeddable ? m.source : 'ext');
+  srcBadge.textContent = isUnavailable ? '⨯ Unavailable' : '▶ Streaming on ' + m.sourceName;
+  srcBadge.className = 'modal-source-banner ' + (isEmbeddable ? m.source : 'ext');
 
-  if (m.embeddable && m.embedUrl) {
+  if (m.playlistUrl) {
+    video.innerHTML = `
+      <div class="external-placeholder">
+        <div class="external-icon">📺</div>
+        <div class="external-title">${m.title}</div>
+        <div class="external-note">Open the playlist externally</div>
+        <a class="btn-external" href="${m.playlistUrl}" target="_blank">▶ Watch playlist</a>
+      </div>`;
+
+    noteEl.innerHTML = `This entry uses an external playlist from <strong>${m.sourceName}</strong>.`;
+  } else if (isUnavailable) {
+    video.innerHTML = `
+      <div class="external-placeholder">
+        <div class="external-icon">⚠️</div>
+        <div class="external-title">${m.title}</div>
+        <div class="external-note">This Movie/Series was taken down or removed. Please wait while we bring it back</div>
+      </div>`;
+
+    noteEl.innerHTML = `This Movie/Series was taken down or removed. Please wait while we bring it back`;
+  } else if (isEmbeddable && m.embedUrl) {
     video.innerHTML = `<iframe src="${m.embedUrl}"
       allow="autoplay; fullscreen; picture-in-picture"
       allowfullscreen
@@ -1505,16 +1647,19 @@ function openMovie(m) {
 
     noteEl.innerHTML = `Embedded from <strong>${m.sourceName}</strong>.`;
   } else {
+    const watchUrl = m.watchUrl;
     video.innerHTML = `
       <div class="external-placeholder">
         <div class="external-icon">📺</div>
         <div class="external-title">${m.title}</div>
         <div class="external-note">Open externally on ${m.sourceName}</div>
-        <a class="btn-external" href="${m.watchUrl}" target="_blank">▶ Watch</a>
+        <a class="btn-external" href="${watchUrl}" target="_blank">▶ Watch</a>
       </div>`;
 
     noteEl.innerHTML = `${m.sourceName} requires external viewing.`;
   }
+
+  updatePlaylistControls(m);
 
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -1523,6 +1668,7 @@ function openMovie(m) {
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
   document.getElementById('modal-video').innerHTML = '';
+  document.getElementById('playlist-controls').innerHTML = '';
   document.body.style.overflow = '';
 }
 
@@ -1540,6 +1686,8 @@ document.getElementById('modal').addEventListener('click', function(e) {
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowRight') playNextMovie();
+  if (e.key === 'ArrowLeft') playPreviousMovie();
 });
 
 renderRows(safeMovies());
@@ -1569,6 +1717,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
   document.getElementById('modal-video').innerHTML = '';
+  document.getElementById('playlist-controls').innerHTML = '';
   document.body.style.overflow = '';
 }
 
@@ -1630,12 +1779,20 @@ function openContributeModal() {
         • <code>watchUrl</code> → Used when users must be redirected externally.<br>
         • <code>embeddable</code> → Set to <code>true</code> for embeds and <code>false</code> for external links.<br><br>
 
+        <strong>For Series:</strong><br><br>
+        • <code>type</code> → Set to <code>series</code>.<br>
+        • <code>playlistUrl</code> → A link to the series playlist.<br><br>
+
+        You will need to create or find a playlist for the series. You can use YouTube, Archive.org playlists. (For Plex just add the series link)<br><br>
+
+
         Pull Requests containing pirated content, broken links, duplicate movies, or invalid object structures may be rejected. If your PR is rejected, don't be discouraged! Just ask for feedback and try again. Thanks for helping make FreeFlix better!
     `;
 
     noteEl.innerHTML =
         "🔗 All submissions are reviewed before being added to FreeFlix.";
 
+    document.getElementById('playlist-controls').innerHTML = '';
     modal.classList.add('open');
     titleEl.textContent = "Contribute to FreeFlix";
     metaEl.innerHTML = "";
@@ -1671,6 +1828,7 @@ function openFAQModal() {
     titleEl.textContent = "FAQ";
     metaEl.innerHTML = "";
     noteEl.innerHTML = "";
+    document.getElementById('playlist-controls').innerHTML = '';
     srcBadge.textContent = "Help Center";
     srcBadge.className = "modal-source-banner ext";
 
@@ -1699,6 +1857,9 @@ function openFAQModal() {
         <strong>How can I support this project?</strong><br>
         You can't. But you can contribute by adding movies or reporting issues on GitHub. <br><br>
     `;
+
+    noteEl.innerHTML =
+        "What do I say here?";
 }
 </script>
 
