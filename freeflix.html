@@ -1642,7 +1642,7 @@ function openMovie(m, playlist = null) {
     video.innerHTML = `<iframe src="${m.embedUrl}"
       allow="autoplay; fullscreen; picture-in-picture"
       allowfullscreen
-      style="border:0"
+      style="border:0" 
       title="${m.title}"></iframe>`;
 
     noteEl.innerHTML = `Embedded from <strong>${m.sourceName}</strong>.`;
