@@ -271,6 +271,7 @@
   .src-yt { background: #ff0000; color: #fff; }
   .src-archive { background: #1a3a5c; color: #5bcefa; border: 1px solid #5bcefa; }
   .src-plex { background: #221f1f; color: #fcc403; border: 1px solid #fcc403; }
+  .src-tubi { background: #000080; color: #fff; border: 1px solid #1e90ff; }
 
   /* MODAL */
   #modal {
@@ -385,6 +386,7 @@
   .modal-source-banner.yt { background: #ff0000; color: #fff; }
   .modal-source-banner.archive { background: #1a3a5c; color: #5bcefa; border: 1px solid #5bcefa; }
   .modal-source-banner.plex { background: #221f1f; color: #fcc403; border: 1px solid #fcc403; }
+  .modal-source-banner.tubi { background: #000080; color: #fff; border: 1px solid #1e90ff; }
   .modal-source-banner.ext { background: #2a2a2a; color: #ccc; border: 1px solid #444; }
   .modal-title { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 10px; }
   .modal-meta { display: flex; gap: 14px; align-items: center; font-size: 13px; color: #aaa; margin-bottom: 16px; flex-wrap: wrap; }
@@ -595,6 +597,7 @@
     <a onclick="filterBySource('yt')">YouTube</a>
     <a onclick="filterBySource('archive')">Archive.org</a>
     <a onclick="filterBySource('plex')">Plex</a>
+    <a id="tubi-nav-link" onclick="filterBySource('tubi')" style="display:inline;">Tubi</a>
     <a onclick="openContributeModal()">Add Movies/Series</a>
     <a onclick="openFAQModal()">FAQ</a>
     <button id="safeToggle" class="safe-btn">Safe Mode: ON</button>
@@ -661,6 +664,40 @@
 <script>
 
 let safeMode = true;
+let userCountry = null;
+let locationReady = false;
+
+// Detect user location
+async function detectLocation() {
+  try {
+    const response = await fetch('https://ipapi.co/json/');
+    const data = await response.json();
+    userCountry = data.country_code;
+    locationReady = true;
+  } catch (e) {
+    console.log('Location detection failed, assuming non-US');
+    userCountry = null;
+    locationReady = true;
+  }
+  
+  // Update UI after location detected
+  updateUIForLocation();
+}
+
+function updateUIForLocation() {
+  const tubiLink = document.getElementById('tubi-nav-link');
+  const isUSUser = userCountry === 'US';
+  
+  // Hide/show Tubi nav link based on location
+  if (tubiLink) {
+    tubiLink.style.display = isUSUser ? 'inline' : 'none';
+  }
+  
+  // Re-render to update content
+  filterAll();
+}
+
+detectLocation();
 
 const movies = [
   {
@@ -1379,6 +1416,7 @@ const movies = [
     id: 51,
     title: "Malcolm in the Middle",
     year: 2000,
+    type: "series",
     genre: ["comedy"],
     source: "archive",
     language: "English",
@@ -1388,23 +1426,67 @@ const movies = [
     playlistUrl: "https://archive.org/details/malcolm-in-the-middle-complete-series-2000-2006",
     embeddable: false,
   },
+  {
+    id: 52,
+    title: "Looney Tunes",
+    year: 2023,
+    genre: ["comedy"],
+    type: "series",
+    source: "tubi",
+    language: "English",
+    sourceName: "Tubi",
+    location: ["US"],
+    desc: "The gang's all here! All your favorite animated stars, from every Looney Tunes and Merrie Melodies cartoon, are here to make you howl with laughter!",
+    thumb: "https://imgs.search.brave.com/ijiF7Wk8CudGaIdsx7zk6w80v0jNv3rI9nBRSg-Z6K4/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9jYW52/YXMtbGIudHViaXR2/LmNvbS9vcHRzL19L/M3p1dll4OHUwMXB3/PT0vZTc2ZDNkYzMt/MzJhYy00ZjBiLWE0/ZWEtZGNhODVlYzU3/YjU1L0NKZ0RFTWNF/T2dVeExqRXVPUT09",
+    embeddable: false,
+    watchUrl: "https://tubitv.com/series/300016553/looney-tunes"
+  },
+  {
+    id: 52,
+    title: "Looney Tunes",
+    year: 2023,
+    genre: ["comedy"],
+    type: "series",
+    source: "tubi",
+    language: "English",
+    sourceName: "Tubi",
+    location: ["US"],
+    desc: "The gang's all here! All your favorite animated stars, from every Looney Tunes and Merrie Melodies cartoon, are here to make you howl with laughter!",
+    thumb: "https://imgs.search.brave.com/ijiF7Wk8CudGaIdsx7zk6w80v0jNv3rI9nBRSg-Z6K4/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9jYW52/YXMtbGIudHViaXR2/LmNvbS9vcHRzL19L/M3p1dll4OHUwMXB3/PT0vZTc2ZDNkYzMt/MzJhYy00ZjBiLWE0/ZWEtZGNhODVlYzU3/YjU1L0NKZ0RFTWNF/T2dVeExqRXVPUT09",
+    embeddable: false,
+    watchUrl: "https://tubitv.com/series/300016553/looney-tunes"
+  },
 ];
 
 
 const adultMovieIds = [17, 31, 45, 46];
 
 function safeMovies() {
-  return safeMode
-    ? movies.filter(m => !adultMovieIds.includes(m.id))
-    : movies;
+  return movies.filter(m => {
+    // Filter by safe mode
+    if (safeMode && adultMovieIds.includes(m.id)) return false;
+    
+    // Filter by location - hide content if location restriction exists and user not in allowed region
+    if (m.location && m.location.length > 0) {
+      // If location detection completed, apply strict filtering
+      if (locationReady) {
+        if (!userCountry || !m.location.includes(userCountry)) {
+          return false;
+        }
+      }
+      // If location not ready yet, show everything (temporary)
+    }
+    
+    return true;
+  });
 }
 
 function sourceClass(src) {
-  return { yt: 'src-yt', archive: 'src-archive', plex: 'src-plex' }[src] || 'src-archive';
+  return { yt: 'src-yt', archive: 'src-archive', plex: 'src-plex', tubi: 'src-tubi' }[src] || 'src-archive';
 }
 
 function sourceLabel(src) {
-  return { yt: 'YouTube', archive: 'Archive.org', plex: 'Plex' }[src] || src;
+  return { yt: 'YouTube', archive: 'Archive.org', plex: 'Plex', tubi: 'Tubi' }[src] || src;
 }
 
 function cardHTML(m) {
@@ -1451,13 +1533,15 @@ function renderRows(list) {
   });
 
   let html = '';
-  const order = ['archive', 'yt', 'plex'];
 
   const rowTitles = {
     archive: 'Internet Archive',
     yt: 'YouTube',
-    plex: 'Plex'
+    plex: 'Plex',
+    tubi: 'Tubi'
   };
+
+  const order = ['archive', 'yt', 'plex', 'tubi'];
 
   order.forEach(src => {
     if (!bySource[src]) return;
