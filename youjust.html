@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>YouJust - Sentence Style Linux Commands</title>
+
+<style>
+body {
+    margin: 0;
+    background: #0d1117;
+    color: #c9d1d9;
+    font-family: Arial, sans-serif;
+}
+
+main {
+    max-width: 1000px;
+    margin: auto;
+    padding: 30px;
+}
+
+.terminal {
+    background: #010409;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 40px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.4);
+}
+
+.terminal-header {
+    background: #161b22;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+}
+
+.red {
+    background: #ff5f56;
+}
+
+.yellow {
+    background: #ffbd2e;
+}
+
+.green {
+    background: #27c93f;
+}
+
+.terminal-title {
+    margin-left: 10px;
+    color: #8b949e;
+}
+
+.terminal-body {
+    padding: 20px;
+    font-family: monospace;
+    line-height: 1.6;
+}
+
+.prompt {
+    color: #58a6ff;
+}
+
+section {
+    background: #161b22;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+h1, h2 {
+    color: white;
+}
+
+h1 {
+    font-size: 42px;
+    text-align: center;
+}
+
+h2 {
+    border-bottom: 1px solid #30363d;
+    padding-bottom: 10px;
+}
+
+p {
+    line-height: 1.6;
+}
+
+code {
+    background: #010409;
+    padding: 4px 7px;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+.command {
+    background: #010409;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: monospace;
+    color: #7ee787;
+}
+
+.download {
+    display: inline-block;
+    background: #238636;
+    color: white;
+    padding: 14px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.download:hover {
+    background: #2ea043;
+}
+
+ul {
+    line-height: 1.8;
+}
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<div class="terminal">
+    <div class="terminal-header">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <span class="terminal-title">Terminal</span>
+    </div>
+
+    <div class="terminal-body">
+        <p>
+            <span class="prompt">aramcz@aramcz-pc:~$</span> youjust help
+        </p>
+
+        <p>
+            YouJust - Sentence-style Linux command tool
+        </p>
+
+        <p>
+            Making Linux commands easier to remember...
+        </p>
+    </div>
+</div>
+
+
+<h1>YouJust</h1>
+
+
+<section>
+    <h2>Introduction</h2>
+
+    <p>
+        YouJust is a sentence-style Linux command tool that allows you to
+        control your system using simple commands written like normal sentences.
+    </p>
+
+    <p>
+        Instead of remembering many Linux commands, YouJust provides an easier
+        way to perform common tasks.
+    </p>
+
+    <p>
+        Example:
+    </p>
+
+    <div class="command">
+        youjust install git<br>
+        youjust create folder projects<br>
+        youjust show system info
+    </div>
+</section>
+
+<section>
+    <h2>Compatibility</h2>
+
+    <p>
+        YouJust is designed for Linux systems and works on distributions that
+        use the Debian package format or have Python 3 available.
+    </p>
+
+    <p>
+        Supported systems include:
+    </p>
+
+    <ul>
+        <li>Linux Mint</li>
+        <li>Ubuntu</li>
+        <li>Debian</li>
+        <li>Pop!_OS</li>
+        <li>Other Debian-based Linux distributions</li>
+    </ul>
+
+    <p>
+        YouJust requires:
+    </p>
+
+    <ul>
+        <li>Python 3</li>
+        <li>Bash shell</li>
+        <li>Apt package manager (for package commands)</li>
+    </ul>
+
+    <p>
+        Other distributons are not supported.
+    </p>
+</section>
+
+<section>
+    <h2>How to Use</h2>
+
+    <p>
+        After installing YouJust, open your terminal and write commands like:
+    </p>
+
+    <div class="command">
+        youjust help<br><br>
+
+        youjust show system info<br>
+        youjust create file test.txt<br>
+        youjust edit notes.txt<br>
+        youjust go into Documents
+    </div>
+
+    <p>
+        YouJust converts these sentences into Linux commands automatically.
+    </p>
+</section>
+
+
+<section>
+    <h2>Why Use YouJust?</h2>
+
+    <ul>
+        <li>Easier to remember than traditional Linux commands.</li>
+        <li>Uses readable sentence-style commands.</li>
+        <li>Useful for beginners learning Linux.</li>
+        <li>Still provides access to powerful terminal features.</li>
+        <li>Lightweight and open source.</li>
+    </ul>
+</section>
+
+
+<section>
+    <h2>Download</h2>
+
+    <p>
+        Download the latest version of YouJust from GitHub Releases.
+    </p>
+
+    <a class="download" href="https://github.com/AramCZdev/YouJust/releases/">
+        Download YouJust
+    </a>
+</section>
+
+
+</main>
+
+</body>
+</html>
