@@ -195,7 +195,7 @@
             <li>You should be ashamed of yourself</li>
         </div>
 
-        <button class="btn" onclick="goHome()">GO HOME AND LEARN TO TYPE</button>
+        <a href="https://www.youtube.com/watch?v=vXsutlz0GIQ" class="btn">LEARN TO TYPE</a>
 
         <div class="suggestions">
             <p>Here are some pages that <em>actually</em> exist:</p>
@@ -211,10 +211,6 @@
 
     <script>
         document.getElementById('urlDisplay').textContent = window.location.href;
-
-        function goHome() {
-            window.location.href = '/';
-        }
 
         // Easter egg: konami code reveals a secret message
         const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];

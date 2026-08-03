@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghostab</title>
+    <link rel="icon" type="image/x-icon" href="./images/ghostab.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6b7eff;
+            --secondary: #d0d0d0;
+            --accent: #ff8a3d;
+            --bg: #121212;
+            --text: #f5f5f5;
+            --muted: #b0b0b0;
+            --border: #333333;
+            --card-bg: #1e1e1e;
+            --done: #44aa44;
+            --planned: #ffc400;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 32px;
+            width: auto;
+        }
+
+        nav a {
+            margin-left: 30px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+
+        .hero img {
+            height: 160px;
+            width: auto;
+            image-rendering: pixelated;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero .tagline {
+            font-size: 18px;
+            color: var(--muted);
+            max-width: 640px;
+            margin: 0 auto 30px;
+        }
+
+        .hero .badges {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 13px;
+            color: var(--secondary);
+        }
+
+        .badge.rust {
+            color: #ff8a3d;
+            border-color: #ff8a3d;
+        }
+
+        .hero .cta {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background: var(--accent);
+        }
+
+        .btn.secondary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn.secondary:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        h2 {
+            font-size: 30px;
+            margin: 50px 0 20px;
+            color: var(--secondary);
+            border-left: 4px solid var(--accent);
+            padding-left: 15px;
+        }
+
+        .intro {
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .intro p {
+            margin-bottom: 15px;
+        }
+
+        .intro p:last-child {
+            margin-bottom: 0;
+        }
+
+        .intro em {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .feature {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(107, 126, 255, 0.2);
+        }
+
+        .feature h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .feature p {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .roadmap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .roadmap-group {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .roadmap-group h3 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .roadmap ul {
+            list-style: none;
+        }
+
+        .roadmap li {
+            padding: 6px 0;
+            color: var(--muted);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .roadmap li::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: var(--planned);
+        }
+
+        .roadmap li.done {
+            color: var(--text);
+        }
+
+        .roadmap li.done::before {
+            background: var(--done);
+        }
+
+        .download-box {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .download-box h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .download-box p {
+            color: var(--muted);
+            margin-bottom: 15px;
+        }
+
+        .download-box code {
+            display: block;
+            background: #0d0d0d;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin: 10px 0;
+            color: var(--accent);
+            font-family: Consolas, monospace;
+            overflow-x: auto;
+        }
+
+        .support {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .support .feature p {
+            margin: 0;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .status.development {
+            background: var(--planned);
+            color: #121212;
+        }
+
+        .status.not-planned {
+            background: #555;
+            color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #ffffff;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav a {
+                margin-left: 15px;
+                font-size: 14px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="hero">
+            <img src="./images/ghostab.png" alt="Ghostab mascot">
+            <h1>Ghostab</h1>
+            <p class="tagline">A tiny experimental browser built around <em>Ghost Engine</em>, a small browser-engine experiment written in Rust. No Blink. No Gecko. Just a ghost.</p>
+            <div class="badges">
+                <span class="badge rust">Rust</span>
+                <span class="badge">No data collected</span>
+                <span class="badge">No Blink / Gecko</span>
+                <span class="badge">Linux</span>
+                <span class="badge">Open-source</span>
+            </div>
+            <div class="cta">
+                <a href="#download" class="btn">Download</a>
+                <a href="https://github.com/AramCZdev/ghostab" target="_blank" class="btn secondary">Source Code</a>
+            </div>
+        </div>
+
+        <h2 id="features">Features</h2>
+        <div class="features">
+            <div class="feature">
+                <h3>Private by design</h3>
+                <p>Never collects any data. No tracking, no telemetry, no accounts — your browsing stays yours.</p>
+            </div>
+            <div class="feature">
+                <h3>No Blink, no Gecko</h3>
+                <p>Does not use Blink or Gecko as a base. Rendering is handled by Ghost Engine, our own small engine.</p>
+            </div>
+            <div class="feature">
+                <h3>Isolated clipboard</h3>
+                <p>The clipboard is kept isolated so websites can't silently read or abuse what you copy.</p>
+            </div>
+            <div class="feature">
+                <h3>Old-styled UI</h3>
+                <p>A simple, old-styled interface. No webview cruft — just a browser that looks like a browser.</p>
+            </div>
+        </div>
+
+        <h2 id="roadmap">Roadmap</h2>
+        <p class="tagline" style="color: var(--muted); margin-bottom: 20px;">What's already in the ghost and what we plan to add next.</p>
+        <div class="roadmap">
+            <div class="roadmap-group">
+                <h3>Core browsing</h3>
+                <ul>
+                    <li class="done">Multiple tabs (variable width)</li>
+                    <li class="done">Back and forward navigation history</li>
+                    <li>Search engine integration with address bar autocomplete</li>
+                    <li class="done">Tabs that can be closed, reordered, and reopened</li>
+                    <li class="done">New tab page</li>
+                    <li class="done">Keyboard shortcuts (Ctrl+T, Ctrl+W, Ctrl+L, ...)</li>
+                </ul>
+            </div>
+            <div class="roadmap-group">
+                <h3>Privacy &amp; customizing</h3>
+                <ul>
+                    <li class="done">Isolated clipboard</li>
+                    <li class="done">Connection security indicator</li>
+                    <li class="done">Settings page</li>
+                    <li>Private (incognito) mode</li>
+                    <li class="done">Dark mode / themes</li>
+                    <li>Update checker</li>
+                </ul>
+            </div>
+            <div class="roadmap-group">
+                <h3>Engine</h3>
+                <ul>
+                    <li>JavaScript support</li>
+                    <li>CSS improvements (flexbox, grid, animations)</li>
+                    <li>HTML5 input elements (forms, buttons)</li>
+                    <li>DevTools</li>
+                    <li>Find in page (Ctrl+F)</li>
+                    <li>Zoom controls (Ctrl + / Ctrl -)</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2 id="download">Download</h2>
+        <div class="download-box">
+            <h3>Linux (Debian)</h3>
+            <p>Download the <code>.deb</code> package from GitHub releases, then install it with:</p>
+            <code>sudo apt install ghostab_1.0.0-alpha_amd64.deb</code>
+            <p>Run <code>ghostab</code> and Ghostab will open.</p>
+            <a href="https://github.com/AramCZdev/Ghostab/releases/download/alpha-1.0.0/ghostab_1.0.0-alpha_amd64.deb" target="_blank" class="btn">Download for Linux (Debian)</a>
+        </div>
+        <div class="support">
+            <div class="feature">
+                <h3>Windows</h3>
+                <p>Support for Ghostab is in development.</p>
+                <span class="status development">In development</span>
+            </div>
+            <div class="feature">
+                <h3>macOS</h3>
+                <p>Support for Ghostab is not planned.</p>
+                <span class="status not-planned">Not planned</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 AramCZ. Built with Ghost Engine in Rust</p>
+    </footer>
+</body>
+</html>
